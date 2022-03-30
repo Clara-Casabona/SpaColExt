@@ -1,0 +1,15 @@
+Package: SpaColExt
+Type: Package
+Title: Infer spatial colonization and extinction dates
+Version: 0.1.0
+Author: Clara Casabona i Amat & Simon Bouchard
+Maintainer: Clara Casabona i Amat  <Clara.Casabona.I.Amat@USherbrooke.ca>
+Description: Package to infer spatial colonization and extinction dates of species
+    Use bayesian approach to estimate the probability of species extant using a modified version of Solow 1992 and 2014 functions at a different spatial levels
+License: use_mit_license()
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports: 
+    ggplot2
