@@ -15,7 +15,7 @@ compute_bayes_factor_solow1993(
 \arguments{
 \item{sightings}{input vector with years}
 
-\item{start_year}{numeric value of the starting study period}
+\item{start_year}{numeric value that equals to 1 year before the first sighting}
 
 \item{end_year}{numeric value of the ending  study period}
 
@@ -30,6 +30,6 @@ The Bayes factor between the species still extant / species going extinct
 Computes the Bayes factor from Solow 1993
 }
 \examples{
-compute_bayes_factor_solow1993(sightings = c(1901,1902,1903,1905,1908,1910), start_year = 1911, end_year = 1920, dprior_m = function(m) 1 / m, dprior_te = function(te) 1)
+compute_bayes_factor_solow1993(sightings = c(1901,1902,1903,1905,1908,1910), start_year = 1900, end_year = 1920, dprior_m = function(m) 1 / m, dprior_te = function(te) 1)
 
 }

@@ -8,7 +8,8 @@
 #' @export
 #'
 #' @examples
-#'
+#' compute_likelyhood_extinction_at_te(t = (c(1901,1902,1903,1905,1908,1910) - 1900) / (1920 - 1900), 1, dprior_m = function(m) 1 / m)
+
 compute_likelyhood_extinction_at_te <- function(t, te, dprior_m) {
   integrate(
     function(m) {
