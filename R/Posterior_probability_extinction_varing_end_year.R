@@ -24,8 +24,8 @@ Posterior_probability_extinction_varying_end_year = function(sightings, start_ye
             sightings = sightings,
             start_year = start_year,
             end_year = t,
-            dprior_m = function(m) 1 / m,
-            dprior_te = function(te) 1,
+            dprior_m = solowdprior_m,
+            dprior_te = solowdprior_te,
             prior = 0.5
           )
         }

@@ -8,8 +8,8 @@ compute_posterior_solow1993(
   sightings,
   start_year,
   end_year,
-  dprior_m = function(m) 1/m,
-  dprior_te = function(te) 1,
+  dprior_m,
+  dprior_te,
   prior = 0.5
 )
 }

@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' compute_bayes_factor_solow1993(sightings = c(1901,1902,1903,1905,1908,1910), start_year = 1900, end_year = 1920, dprior_m = function(m) 1 / m, dprior_te = function(te) 1)
+#' compute_bayes_factor_solow1993(sightings = c(1901,1902,1903,1905,1908,1910), start_year = 1900, end_year = 1920, dprior_m =solowdprior_m, dprior_te = solowdprior_te)
 #'
 compute_bayes_factor_solow1993 <- function(sightings, start_year, end_year, dprior_m, dprior_te) {
   t <- (sightings - start_year) / (end_year - start_year)
