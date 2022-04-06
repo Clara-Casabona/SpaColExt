@@ -7,9 +7,15 @@
 <!-- badges: end -->
 
 The goal of SpaColExt R package is to infer spatial colonization and
-extinction dates of species acounting for the spatial heterogeneity of
-the data. It uses a bayesian approach to estimate the probability of
-species still extant thourgh the time a different spatial levels.
+extinction dates of species accounting for the spatial heterogeneity of
+the data. It uses a Bayesian approach to estimate the probability of
+species still extant through the time a different spatial level.
+
+We use the Bayesian functions from [Solow
+1993](https://www.jstor.org/stable/1940821?seq=1) and we will also add
+the [Solow & Beet
+2014](https://www.researchgate.net/publication/262387815_On_Uncertain_Sightings_and_Inference_about_Extinction)
+functions to incorporate the certainty and uncertainty of the data.
 
 ## Installation
 
@@ -20,6 +26,12 @@ You can install the development version of SpaColExt from
 # install.packages("devtools")
 devtools::install_github("Clara-Casabona/SpaColExt")
 ```
+
+## Some notes:
+
+This package is in development. I need to:
+
+-   Add spatial prior information
 
 ## Example 1
 
@@ -55,21 +67,26 @@ sites:
 ``` r
 library(SpaColExt)
 
-## basic example code
+## Creating data in a matrix 2x2
 data = list(c(1880, 1883, 1895, 1897, 1899), NA, NA, c(1882, 1884, 1896, 1898))
 dim(data) <- c(2, 2)
+
+## Using Solow 1993 priors
 dprior_m = function(m) 1 / m
 dprior_te = function(te) 1
 prior =0.5
+
+## Study interval
 start_year = 1880
 stop_year = 1930
+
+
+# Estimating extant probabilities
+
 extant_probability = Spatial_posterior_probability_extinction_varying_end_year(data, 
                                                                                start_year=start_year,
                                                                                stop_year=stop_year)
-extant_probability
-#>      [,1]       [,2]      
-#> [1,] numeric,51 NA        
-#> [2,] NA         numeric,51
+## Output of one of the sites:
 
 extant_probability[1,1]
 #> [[1]]
@@ -83,7 +100,53 @@ extant_probability[1,1]
 #> [43] 0.14882522 0.13682842 0.12594264 0.11605784 0.10707460 0.09890328
 #> [49] 0.09146330 0.08468226 0.07849524
 
+# Ploting the exant probability
+
 Plot_posterior_distribution(extant_probability, start_year=start_year, stop_year=stop_year)
 ```
 
 <img src="man/figures/README-example2-1.png" width="100%" />
+
+With this example we estimate the probability that the species is extant
+in different sites considering that the observations are independent
+between the sites.
+
+## Example 3 (In development)
+
+This example will show you how to estimate the posterior distribution of
+the extant probability of an extinct species in different sites,
+assuming that the observations in one site are influenced by the
+observations in neighbours sites:
+
+``` r
+library(SpaColExt)
+
+## Creating data in a matrix 4x4
+data = list(c(1880, 1883, 1895, 1897, 1899), NA, NA, c(1882, 1884, 1896, 1898),NA,c(1880, 1883, 1895, 1897, 1899),c(1880, 1883, 1895, 1897, 1899),c(1880, 1883, 1895, 1897, 1899),c(1880, 1883, 1895, 1897, 1899),NA, NA, NA, c(1880, 1883, 1895, 1897, 1899), NA, NA, NA )
+dim(data) <- c(4, 4)
+
+## Using spatial priors
+#dprior_m = # LGCP with inla 
+#dprior_te = function(te) 1
+#prior =0.5
+
+## Study interval
+#start_year = 1880
+#stop_year = 1930
+
+
+# Estimating extant probabilities
+
+#extant_probability = Spatial_posterior_probability_extinction_varying_end_year(data, 
+#                                                                               start_year=start_year,
+#                                                                               stop_year=stop_year)
+## Output of one of the sites:
+
+#extant_probability[1,1]
+
+# Ploting the exant probability
+
+#Plot_posterior_distribution(extant_probability, start_year=start_year, stop_year=stop_year)
+
+# Spatial map by year
+```
