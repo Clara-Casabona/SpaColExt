@@ -14,7 +14,7 @@
 #'
 compute_bayes_factor_solow1993 <- function(sightings, start_year, end_year, dprior_m, dprior_te) {
   t <- (sightings - start_year) / (end_year - start_year)
-
+#test
   # Likelihood of data given no extinction
   likelyhood_h0 <- function(t) {
     compute_likelyhood_extinction_at_te(
