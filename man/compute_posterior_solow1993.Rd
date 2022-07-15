@@ -33,5 +33,5 @@ Posterior distribution of the extant probability of a species during the study p
 Title
 }
 \examples{
-compute_posterior_solow1993(sightings = c(1901,1902,1903,1905,1908,1910), start_year = 1900, end_year = 1920, dprior_m = function(m) 1 / m,  dprior_te = function(te) 1, prior = 0.5)
+compute_posterior_solow1993(sightings = c(1901,1902,1903,1905,1908,1910), start_year = 1900, end_year = 1920, dprior_m = solowdprior_m,  dprior_te = solowdprior_te, prior = 0.5)
 }

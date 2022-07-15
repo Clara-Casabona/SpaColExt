@@ -12,10 +12,6 @@ Plot_posterior_distribution(extinction_posterior, start_year, stop_year)
 \item{start_year}{Year at which we want to estimate the extant posterior probability}
 
 \item{stop_year}{Year at which we stop to estimate the extant  posterior probability}
-
-\item{year}{Variable generated automaticaly in the function to scale the plot}
-
-\item{value}{Corresponds to the extinction posterior value}
 }
 \value{
 Plot with posterior extant probability
