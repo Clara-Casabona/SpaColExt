@@ -1,6 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+
+### Important:  this package is in development.
+
 # SpaColExt
 
 <!-- badges: start -->
@@ -29,9 +32,7 @@ devtools::install_github("Clara-Casabona/SpaColExt")
 
 ## Some notes:
 
-This package is in development. I need to:
-
--   Add spatial prior information
+This package is in development, the informative prior build using the spatial data will be added in the next weeks. 
 
 ## Example 1
 
