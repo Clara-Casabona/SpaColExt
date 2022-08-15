@@ -1,9 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-
-### Important:  this package is in development.
-
 # SpaColExt
 
 <!-- badges: start -->
@@ -32,7 +29,9 @@ devtools::install_github("Clara-Casabona/SpaColExt")
 
 ## Some notes:
 
-This package is in development, the informative prior build using the spatial data will be added in the next weeks. 
+This package is in development. I need to:
+
+-   Add spatial prior information
 
 ## Example 1
 
@@ -121,33 +120,43 @@ observations in neighbours sites:
 
 ``` r
 library(SpaColExt)
+library(ggplot2) # To use the visualization function
+library(dplyr) # To use the full join in the visualization function (this will be loaded automaticaly with the package soon)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+# Create a realistic data set of observations 
+n = 40 # number of years with observational data
+t_ext = 1940 # True extinction time
+t_start = t_ext - n #Year of the possible first observation
+t_stop = 2040 # End of the study period
+m_rate = 5 # mean time between sighting before extinction
 
-## Creating data in a matrix 4x4
-data = list(c(1880, 1883, 1895, 1897, 1899), NA, NA, c(1882, 1884, 1896, 1898),NA,c(1880, 1883, 1895, 1897, 1899),c(1880, 1883, 1895, 1897, 1899),c(1880, 1883, 1895, 1897, 1899),c(1880, 1883, 1895, 1897, 1899),NA, NA, NA, c(1880, 1883, 1895, 1897, 1899), NA, NA, NA )
-dim(data) <- c(4, 4)
+generate_data = function(t_start, t_ext, m_rate) {
+  sightings = t_start + unique(floor(cumsum(rexp(2*(t_ext-t_start)/m_rate, 1/m_rate))))
+  sightings[sightings<=t_ext]
+}
 
-## Using spatial priors
-#dprior_m = # LGCP with inla 
-#dprior_te = function(te) 1
-#prior =0.5
+sightings = generate_data(t_start, t_ext, m_rate) # Simulated sighting used to predict extinction in a specific place
 
-## Study interval
-#start_year = 1880
-#stop_year = 1930
+sightings2 = generate_data(t_start, t_ext+10, 1)  # Simulated sighting list to estimate the first posterior distribution of extinction date 
 
 
-# Estimating extant probabilities
+posterior = compute_posterior_c2022_extinction(sightings2, t_start, t_stop)
 
-#extant_probability = Spatial_posterior_probability_extinction_varying_end_year(data, 
-#                                                                               start_year=start_year,
-#                                                                               stop_year=stop_year)
-## Output of one of the sites:
+prior_te = approxfun(t_start:t_stop, posterior) # IMPORTANT! The scaling still in progress! This might be modified in the next weeks. 
 
-#extant_probability[1,1]
+prior_m = function(m) exp(-((m-m_rate)/2)**2) # Generating the function for the prior observation rate
 
-# Ploting the exant probability
-
-#Plot_posterior_distribution(extant_probability, start_year=start_year, stop_year=stop_year)
-
-# Spatial map by year
+vizualize_priors_effects(t_start, t_stop, sightings, prior_te = prior_te, prior_m = prior_m)
+#> Joining, by = "year"
+#> Joining, by = "year"
+#> Joining, by = "year"
 ```
+
+<img src="man/figures/README-example3-1.png" width="100%" />
