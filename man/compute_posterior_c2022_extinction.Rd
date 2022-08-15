@@ -2,30 +2,30 @@
 % Please edit documentation in R/compute_posterior_c2022_extinction.R
 \name{compute_posterior_c2022_extinction}
 \alias{compute_posterior_c2022_extinction}
-\title{Compute Posterior extant probability with new TE prior}
+\title{Compute  Posterior Extinction with informative priors}
 \usage{
 compute_posterior_c2022_extinction(
   sightings,
   start_year,
   stop_year,
-  extinction_posteriorLevel
+  prior_te = NULL,
+  prior_m = NULL
 )
 }
 \arguments{
-\item{sightings}{matrix array with years by cell}
+\item{sightings}{list of observations}
 
-\item{start_year}{Start of the study period}
+\item{start_year}{first year of study period}
 
-\item{stop_year}{End of the study period}
+\item{stop_year}{last year of study period}
 
-\item{extinction_posteriorLevel}{Posterior extant probability of a higher spatial level analysis}
+\item{prior_te}{flexible function - add prior extinction rate distribution}
+
+\item{prior_m}{flexible function - add prior observation rate distribution}
 }
 \value{
-the posterior extrant probability of an species by location
+
 }
 \description{
-Compute Posterior extant probability with new TE prior
-}
-\examples{
-
+Compute  Posterior Extinction with informative priors
 }
