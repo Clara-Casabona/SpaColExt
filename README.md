@@ -120,8 +120,7 @@ observations in neighbours sites:
 
 ``` r
 library(SpaColExt)
-library(ggplot2) # To use the visualization function
-library(dplyr) # To use the full join in the visualization function (this will be loaded automaticaly with the package soon)
+library(dplyr)
 #> 
 #> Attaching package: 'dplyr'
 #> The following objects are masked from 'package:stats':
@@ -130,12 +129,15 @@ library(dplyr) # To use the full join in the visualization function (this will b
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
+library(ggplot2)
+library(ggpubr)
+
 # Create a realistic data set of observations 
 n = 40 # number of years with observational data
 t_ext = 1940 # True extinction time
 t_start = t_ext - n #Year of the possible first observation
 t_stop = 2040 # End of the study period
-m_rate = 5 # mean time between sighting before extinction
+m_rate = 2 # mean time between sighting before extinction
 
 generate_data = function(t_start, t_ext, m_rate) {
   sightings = t_start + unique(floor(cumsum(rexp(2*(t_ext-t_start)/m_rate, 1/m_rate))))
@@ -149,9 +151,12 @@ sightings2 = generate_data(t_start, t_ext+10, 1)  # Simulated sighting list to e
 
 posterior = compute_posterior_c2022_extinction(sightings2, t_start, t_stop)
 
-prior_te = approxfun(t_start:t_stop, posterior) # IMPORTANT! The scaling still in progress! This might be modified in the next weeks. 
+prior_te = approxfun(t_start:t_stop, 1-posterior) # IMPORTANT! The scaling still in progress! This might be modified in the next weeks. 
 
-prior_m = function(m) exp(-((m-m_rate)/2)**2) # Generating the function for the prior observation rate
+prior_m = Vectorize(function(m) {
+  if(m > 10*m_rate) return(1e-6)
+  m_rate**m * exp(-m_rate) / gamma(m+1)
+})
 
 vizualize_priors_effects(t_start, t_stop, sightings, prior_te = prior_te, prior_m = prior_m)
 #> Joining, by = "year"
