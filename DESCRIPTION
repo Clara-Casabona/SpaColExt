@@ -15,6 +15,7 @@ RoxygenNote: 7.1.2
 Imports: 
     ggplot2,
     reshape2,
-    dplyr
+    dplyr,
+    ggpubr
 URL: https://github.com/Clara-Casabona/SpaColExt
 BugReports: https://github.com/Clara-Casabona/SpaColExt/issues

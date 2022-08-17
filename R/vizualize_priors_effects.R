@@ -66,7 +66,6 @@ c =  ggplot(df, aes(x=years, y=prior_te_eval)) +
     theme(axis.title.x=element_text(size=8))+
     geom_line() +
     labs(x = "Posterior date of extinction probability  (Prior te)", y = "Probability")
-library(ggpubr)
 
  ggarrange(a,                                                 # First row with scatter plot
           ggarrange(c, b, ncol = 2, labels = c("B", "C"), widths = c(1,0.83)), # Second row with box and dot plots
