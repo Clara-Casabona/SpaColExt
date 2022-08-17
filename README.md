@@ -131,6 +131,7 @@ library(dplyr)
 #>     intersect, setdiff, setequal, union
 library(ggplot2)
 library(ggpubr)
+set.seed(12)
 
 # Create a realistic data set of observations 
 n = 40 # number of years with observational data
