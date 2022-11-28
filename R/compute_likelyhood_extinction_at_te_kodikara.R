@@ -1,5 +1,5 @@
 
-#' Title
+#' Compute extinction a extinction time
 #'
 #' @param t
 #' @param te

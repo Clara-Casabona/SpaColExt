@@ -1,4 +1,4 @@
-#' Title
+#' Compute bayes factor folowing a non - homogeneous poisson proces
 #'
 #' @param sightings
 #' @param start_year
