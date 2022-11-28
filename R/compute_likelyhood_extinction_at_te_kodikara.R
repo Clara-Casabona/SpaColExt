@@ -1,9 +1,9 @@
 
-#' Compute extinction a extinction time
+#' Compute extinction likelihood a extinction time
 #'
-#' @param t
-#' @param te
-#' @param dprior_m
+#' @param t number of sightings
+#' @param te extinction time
+#' @param dprior_m  function of the prior observation rate m
 #'
 #' @return
 #' @export

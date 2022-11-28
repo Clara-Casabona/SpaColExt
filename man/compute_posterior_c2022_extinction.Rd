@@ -23,9 +23,6 @@ compute_posterior_c2022_extinction(
 
 \item{prior_m}{flexible function - add prior observation rate distribution}
 }
-\value{
-
-}
 \description{
 Compute  Posterior Extinction with informative priors
 }

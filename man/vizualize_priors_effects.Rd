@@ -17,9 +17,6 @@ vizualize_priors_effects(t_start, t_stop, sightings, prior_te, prior_m)
 
 \item{prior_m}{Function with the prior observation rate distribution}
 }
-\value{
-
-}
 \description{
 Vizualize Priors Effects
 }

@@ -1,10 +1,10 @@
 #' Compute bayes factor folowing a non - homogeneous poisson proces
 #'
-#' @param sightings
-#' @param start_year
-#' @param end_year
-#' @param dprior_m
-#' @param dprior_te
+#' @param sightings sequence of years with observations in a vector
+#' @param start_year starting study period
+#' @param end_year   ending study period
+#' @param dprior_m  function to estimate the prior observation rate m
+#' @param dprior_te function to estimate the prior extinction time
 #'
 #' @return
 #' @export

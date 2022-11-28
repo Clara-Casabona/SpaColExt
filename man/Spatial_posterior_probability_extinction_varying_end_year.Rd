@@ -18,9 +18,6 @@ Spatial_posterior_probability_extinction_varying_end_year(
 
 \item{stop_year}{Year at which we stop to estimate the extant  posterior probability}
 }
-\value{
-
-}
 \description{
 Spatial Extant Posterior Probability  by years
 }
