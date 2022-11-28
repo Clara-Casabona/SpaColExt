@@ -39,6 +39,10 @@ This package is in development. I need to:
 
 - Add spatial prior information
 
+- Add non-homogeneous poisson processes
+
+- Add colonization fonctions
+
 ## Example 1 
  
 This is a basic example which shows you how to estimate the posterior distribution of the extant probability of a extinct species:

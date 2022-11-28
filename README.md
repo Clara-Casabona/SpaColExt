@@ -37,6 +37,10 @@ This package is in development. I need to:
 
 -   Add spatial prior information
 
+-   Add non-homogeneous poisson processes
+
+-   Add colonization fonctions
+
 ## Example 1
 
 This is a basic example which shows you how to estimate the posterior
@@ -170,3 +174,5 @@ vizualize_priors_effects(t_start, t_stop, sightings, prior_te = prior_te, prior_
 ```
 
 <img src="man/figures/README-example3-1.png" width="100%" />
+
+## Example 4 (In development)
