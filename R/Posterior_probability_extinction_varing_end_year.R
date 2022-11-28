@@ -15,7 +15,7 @@ Posterior_probability_extinction_varying_end_year = function(sightings, start_ye
 
    analysis_interval = seq(start_year, stop_year)
 
-   if( length(sightings) < 2) return(analysis_interval*0)  # Not enough observations
+   if( length(sightings) < 2) return(analysis_interval = NA)  # Not enough observations
 
       Vectorize(
         function(t) {
