@@ -22,6 +22,7 @@ The goal of SpaColExt R package is to infer spatial colonization and extinction 
 
 We use the Bayesian functions from [Solow 1993](https://www.jstor.org/stable/1940821?seq=1) and we will also add the  [Solow & Beet 2014](https://www.researchgate.net/publication/262387815_On_Uncertain_Sightings_and_Inference_about_Extinction) functions to incorporate the certainty and uncertainty of the data. 
 
+In this moment I'm adding a non-homogeneous Poisson processes inspired from  [Kodikara 2020](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13542) 
 
 ## Installation
 
@@ -64,7 +65,7 @@ compute_posterior_solow1993(sightings = sightings,
 
 ## Example 2 
  
-This is a basic example which shows you how to estimate the posterior distribution of the extant probability of a extinct species in different sites:
+This is a basic example which shows you how to estimate the posterior distribution of the extant probability of an extinct species in different sites:
 
 ```{r example2}
 library(SpaColExt)
@@ -100,9 +101,9 @@ Plot_posterior_distribution(extant_probability, start_year=start_year, stop_year
 
 With this example we estimate the probability that the species is extant in different sites considering that the observations are independent between the sites.
 
-## Example 3  (In development)
+## Example 3 (In development)
 
-This  example will show you how to estimate the posterior distribution of the extant probability of an extinct species in different sites, assuming that the observations in one site are influenced by the  observations in neighbours sites:
+This example will show you how to estimate the posterior distribution of the extant probability of an extinct species in different sites, assuming that the observations in one site are influenced by the observations in neighbours sites:
 
 ```{r example3}
 library(SpaColExt)
@@ -142,5 +143,6 @@ vizualize_priors_effects(t_start, t_stop, sightings, prior_te = prior_te, prior_
 
 ```
 
+## Example 4 (In development) 
 
 

@@ -17,6 +17,10 @@ the [Solow & Beet
 2014](https://www.researchgate.net/publication/262387815_On_Uncertain_Sightings_and_Inference_about_Extinction)
 functions to incorporate the certainty and uncertainty of the data.
 
+In this moment I’m adding a non-homogeneous Poisson processes inspired
+from [Kodikara
+2020](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13542)
+
 ## Installation
 
 You can install the development version of SpaColExt from
@@ -61,8 +65,8 @@ compute_posterior_solow1993(sightings = sightings,
 ## Example 2
 
 This is a basic example which shows you how to estimate the posterior
-distribution of the extant probability of a extinct species in different
-sites:
+distribution of the extant probability of an extinct species in
+different sites:
 
 ``` r
 library(SpaColExt)
