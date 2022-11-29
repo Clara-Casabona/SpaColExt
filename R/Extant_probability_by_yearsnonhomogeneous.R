@@ -9,7 +9,7 @@
 #'
 #' @examples
 #'
-Posterior_probability_extinction_non_homogeneos_varying_end_year = function(sightings, start_year, stop_year) {
+posterior_probability_extinction_non_homogeneos_varying_end_year = function(sightings, start_year, stop_year) {
 
   if( any(is.na(sightings)) ) return(NA)
 

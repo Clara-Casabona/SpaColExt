@@ -8,8 +8,8 @@
 #' @export
 #'
 #' @examples
-#' Posterior_probability_extinction_varying_end_year(sightings = c(1898, 1899, 1900, 1901, 1902, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1913),1898, 1930)
-Posterior_probability_extinction_varying_end_year = function(sightings, start_year, stop_year) {
+#' posterior_probability_extinction_varying_end_year(sightings = c(1898, 1899, 1900, 1901, 1902, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1913),1898, 1930)
+posterior_probability_extinction_varying_end_year = function(sightings, start_year, stop_year) {
 
    if( any(is.na(sightings)) ) return(NA)
 
