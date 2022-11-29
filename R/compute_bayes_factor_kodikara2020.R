@@ -1,10 +1,10 @@
-#' Compute bayes factor folowing a non - homogeneous poisson proces
+#' Compute Bayes factor following a non-homogeneous Poisson process.
 #'
-#' @param sightings sequence of years with observations in a vector
+#' @param sightings  sequence of years with observations in a vector
 #' @param start_year starting study period
 #' @param end_year   ending study period
-#' @param dprior_m  function to estimate the prior observation rate m
-#' @param dprior_te function to estimate the prior extinction time
+#' @param dprior_m   function to estimate the prior observation rate m
+#' @param dprior_te  function to estimate the prior extinction time
 #'
 #' @return
 #' @export
@@ -12,8 +12,9 @@
 #' @examples compute_bayes_factor_kodikara2020(sightings = c(1901,1902,1903,1905,1908,1910), start_year = 1900, end_year = 1920, dprior_m =solowdprior_m, dprior_te = solowdprior_te)
 compute_bayes_factor_kodikara2020 <- function(sightings, start_year, end_year, dprior_m, dprior_te) {
   t <- (sightings - start_year) / (end_year - start_year)
-  #test
+
   # Likelihood of data given no extinction
+
   likelyhood_h0 <- function(t) {
     compute_likelyhood_extinction_at_te_kodikara(
       t,
@@ -23,6 +24,7 @@ compute_bayes_factor_kodikara2020 <- function(sightings, start_year, end_year, d
   }
 
   # Likelihood of data given extinction
+
   likelyhood_h1 <- function(t) {
     integrate(
       Vectorize(
@@ -39,5 +41,7 @@ compute_bayes_factor_kodikara2020 <- function(sightings, start_year, end_year, d
       abs.tol = 1e-8
     )$value
   }
+
   likelyhood_h0(t) / likelyhood_h1(t)
+
 }
