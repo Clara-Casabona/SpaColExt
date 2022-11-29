@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_bayes_factor_kodikara2020.R
 \name{compute_bayes_factor_kodikara2020}
 \alias{compute_bayes_factor_kodikara2020}
-\title{Compute bayes factor folowing a non - homogeneous poisson proces}
+\title{Compute Bayes factor following a non-homogeneous Poisson process.}
 \usage{
 compute_bayes_factor_kodikara2020(
   sightings,
@@ -24,7 +24,7 @@ compute_bayes_factor_kodikara2020(
 \item{dprior_te}{function to estimate the prior extinction time}
 }
 \description{
-Compute bayes factor folowing a non - homogeneous poisson proces
+Compute Bayes factor following a non-homogeneous Poisson process.
 }
 \examples{
 compute_bayes_factor_kodikara2020(sightings = c(1901,1902,1903,1905,1908,1910), start_year = 1900, end_year = 1920, dprior_m =solowdprior_m, dprior_te = solowdprior_te)
