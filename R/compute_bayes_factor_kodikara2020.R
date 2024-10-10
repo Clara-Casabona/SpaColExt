@@ -25,6 +25,7 @@ compute_bayes_factor_kodikara2020 <- function(sightings, start_year, end_year, d
 
   # Likelihood of data given extinction
 
+
   likelyhood_h1 <- function(t) {
     integrate(
       Vectorize(
@@ -42,6 +43,7 @@ compute_bayes_factor_kodikara2020 <- function(sightings, start_year, end_year, d
     )$value
   }
 
-  likelyhood_h0(t) / likelyhood_h1(t)
+ likelyhood_h0(t) / likelyhood_h1(t)
+
 
 }

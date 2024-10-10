@@ -17,7 +17,10 @@ Imports:
     reshape2,
     dplyr,
     ggpubr,
-    tidyr
+    tidyr,
+    EnvStats,
+    forecast,
+    cubature
 URL: https://github.com/Clara-Casabona/SpaColExt
 BugReports: https://github.com/Clara-Casabona/SpaColExt/issues
 Suggests: 

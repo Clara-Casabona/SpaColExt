@@ -5,29 +5,19 @@
 #' @param te extinction time
 #' @param dprior_m  function of the prior observation rate m
 #'
-#' @return
+#' @return extinction likelihood at a specific extinction time
 #' @export
 #'
 #' @examples
 #'
 compute_likelyhood_extinction_at_te_kodikara <- function(t, te, dprior_m) {
-  integrate(
-    Vectorize(
-      function(alpha) {
-       integrate(
-          Vectorize(
-            function(m){
-              exp(length(t)*(alpha*log(m) + log(alpha)) + (alpha-1)*sum(log(t))- (m * te)^alpha + log(dprior_m(m)))
-            }
-         ),
-         lower = 0,
-         upper = 1000,
-         abs.tol = 1e-8
-      )$value
-    }
-  ),
-  lower = 0,
-  upper = Inf,
-  abs.tol = 1e-8
-  )$value
-}
+    n = length(t)
+    integrate(
+      Vectorize(function(alpha) {
+        exp(n * log(alpha) + (alpha - 1) * log(prod(t)) - log(alpha) - alpha * n * log(te) + log(gamma(n)))
+      }),
+      lower = 0,
+      upper = Inf,
+      abs.tol = 1e-8
+    )$value
+  }

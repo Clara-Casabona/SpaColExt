@@ -15,9 +15,9 @@ posterior_probability_extinction_non_homogeneos_varying_end_year = function(sigh
 
   analysis_interval = seq(start_year, stop_year)
 
-  if( length(sightings) < 2) return(analysis_interval = NA)  # Not enough observations
+   if( length(sightings) < 2) return(analysis_interval = NA)  # Not enough observations
 
-  Vectorize(
+   Vectorize(
     function(t) {
       if (t <= max(sightings)) return(1)
       compute_posterior_non_homogeneous(
@@ -30,4 +30,5 @@ posterior_probability_extinction_non_homogeneos_varying_end_year = function(sigh
       )
     }
   )(analysis_interval)
+
 }

@@ -35,11 +35,11 @@ devtools::install_github("Clara-Casabona/SpaColExt")
 
 This package is in development. I need to:
 
--   Add spatial prior information
+- Add spatial prior information
 
--   Add non-homogeneous poisson processes
+- Add non-homogeneous poisson processes
 
--   Add colonization fonctions
+- Add colonization fonctions
 
 ## Example 1
 
@@ -91,7 +91,7 @@ stop_year = 1930
 
 # Estimating extant probabilities
 
-extant_probability = Spatial_posterior_probability_extinction_varying_end_year(data, 
+extant_probability = spatial_posterior_probability_extinction_varying_end_year(data, 
                                                                                start_year=start_year,
                                                                                stop_year=stop_year)
 ## Output of one of the sites:
@@ -110,7 +110,7 @@ extant_probability[1,1]
 
 # Ploting the exant probability
 
-Plot_posterior_distribution(extant_probability, start_year=start_year, stop_year=stop_year)
+plot_posterior_distribution(extant_probability, start_year=start_year, stop_year=stop_year)
 ```
 
 <img src="man/figures/README-example2-1.png" width="100%" />
@@ -120,6 +120,12 @@ in different sites considering that the observations are independent
 between the sites.
 
 ## Example 3 (In development)
+
+This is an example to estimate the posterior distribution of the extant
+probability of an extinct species in different sites, accounting for the
+heterogeneity in the observation rate. Using Kodikara 2020 function.
+
+## Example 4 (In development)
 
 This example will show you how to estimate the posterior distribution of
 the extant probability of an extinct species in different sites,
@@ -138,6 +144,11 @@ library(dplyr)
 #> 
 #>     intersect, setdiff, setequal, union
 library(ggplot2)
+#> 
+#> Attaching package: 'ggplot2'
+#> The following object is masked from 'package:SpaColExt':
+#> 
+#>     alpha
 library(ggpubr)
 set.seed(12)
 
@@ -168,11 +179,9 @@ prior_m = Vectorize(function(m) {
 })
 
 vizualize_priors_effects(t_start, t_stop, sightings, prior_te = prior_te, prior_m = prior_m)
-#> Joining, by = "year"
-#> Joining, by = "year"
-#> Joining, by = "year"
+#> Joining with `by = join_by(year)`
+#> Joining with `by = join_by(year)`
+#> Joining with `by = join_by(year)`
 ```
 
 <img src="man/figures/README-example3-1.png" width="100%" />
-
-## Example 4 (In development)

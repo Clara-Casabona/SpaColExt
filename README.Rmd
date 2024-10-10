@@ -90,7 +90,7 @@ stop_year = 1930
 
 # Estimating extant probabilities
 
-extant_probability = Spatial_posterior_probability_extinction_varying_end_year(data, 
+extant_probability = spatial_posterior_probability_extinction_varying_end_year(data, 
                                                                                start_year=start_year,
                                                                                stop_year=stop_year)
 ## Output of one of the sites:
@@ -99,13 +99,22 @@ extant_probability[1,1]
 
 # Ploting the exant probability
 
-Plot_posterior_distribution(extant_probability, start_year=start_year, stop_year=stop_year)
+plot_posterior_distribution(extant_probability, start_year=start_year, stop_year=stop_year)
 ```
 
 
 With this example we estimate the probability that the species is extant in different sites considering that the observations are independent between the sites.
 
-## Example 3 (In development)
+## Example 3 (In development) 
+
+This is an example to estimate the posterior distribution of the extant probability of an extinct species in different sites, accounting for the heterogeneity in the  observation rate. Using Kodikara 2020 function. 
+
+```{r}
+
+```
+
+
+## Example 4 (In development)
 
 This example will show you how to estimate the posterior distribution of the extant probability of an extinct species in different sites, assuming that the observations in one site are influenced by the observations in neighbours sites:
 
@@ -147,6 +156,5 @@ vizualize_priors_effects(t_start, t_stop, sightings, prior_te = prior_te, prior_
 
 ```
 
-## Example 4 (In development) 
 
 
