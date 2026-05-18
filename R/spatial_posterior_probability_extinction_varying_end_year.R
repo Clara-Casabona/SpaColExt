@@ -4,7 +4,7 @@
 #' @param stop_year   Year at which we stop to estimate the extant  posterior probability
 #' @param sightings   Matrix with vectors that contain the years with  observations
 #'
-#' @return
+#' @return Matrix/list of posterior extant probability vectors by site.
 #' @export
 #'
 #' @examples

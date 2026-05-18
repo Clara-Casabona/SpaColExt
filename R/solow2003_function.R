@@ -1,12 +1,11 @@
 #' solow2003_function
 #'
-#' @param sightings
-#' @param alpha
+#' @param sightings Numeric vector of sighting years.
+#' @param alpha Significance level used to compute the confidence interval.
 #'
 #' @return solow2003_function - estimated
 #' @export
 #'
-#' @examples
 #'
 solow2003_function <- function(sightings, alpha) {
   # Create a two column data base with year and sightings

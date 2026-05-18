@@ -6,7 +6,6 @@
 #' @return function prior extinction time
 #' @export
 #'
-#' @examples
 solowdprior_te = function(te) {
   1
   }

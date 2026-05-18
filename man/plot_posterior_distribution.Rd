@@ -2,25 +2,32 @@
 % Please edit documentation in R/plot_posterior_distribution.R
 \name{plot_posterior_distribution}
 \alias{plot_posterior_distribution}
-\title{Plot temporal posterior distribution}
+\title{Plot temporal posterior extant probabilities}
 \usage{
 plot_posterior_distribution(extinction_posterior, start_year, stop_year)
 }
 \arguments{
-\item{extinction_posterior}{Output from the posterior probability extinction functions (vector or list of vectors)}
+\item{extinction_posterior}{Output from one of the posterior probability
+functions. This can be a numeric vector, a list of numeric vectors, or a
+matrix/list returned by \code{\link[=spatial_posterior_probability_extinction_varying_end_year]{spatial_posterior_probability_extinction_varying_end_year()}}.}
 
-\item{start_year}{Year at which we want to estimate the extant posterior probability}
+\item{start_year}{First year of the study period.}
 
-\item{stop_year}{Year at which we stop to estimate the extant  posterior probability}
+\item{stop_year}{Last year of the study period.}
 }
 \value{
-Plot with posterior extant probability
+A \code{ggplot} object with posterior extant probabilities through time.
 }
 \description{
-Plot temporal posterior distribution
+Plot temporal posterior extant probabilities
 }
 \examples{
-data = list(c(1880, 1883, 1895, 1897, 1899), NA, NA, c(1882, 1884, 1896, 1898))
+data <- list(c(1880, 1883, 1895, 1897, 1899), NA, NA, c(1882, 1884, 1896, 1898))
 dim(data) <- c(2, 2)
-plot_posterior_distribution(spatial_posterior_probability_extinction_varying_end_year(data, start_year=1880, stop_year=1920), start_year=1880, stop_year=1920)
+posterior <- spatial_posterior_probability_extinction_varying_end_year(
+  data,
+  start_year = 1880,
+  stop_year = 1920
+)
+plot_posterior_distribution(posterior, start_year = 1880, stop_year = 1920)
 }

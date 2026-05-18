@@ -1,21 +1,22 @@
 #' Compute bayes factor kodikara2020 fixed alpha
 #'
-#' @param sightings
-#' @param start_year
-#' @param end_year
-#' @param alpha
+#' @param sightings Numeric vector of sighting years.
+#' @param start_year First year of the study period.
+#' @param end_year Last year of the study period.
+#' @param dprior_m Function for the prior distribution of observation rate.
+#' @param dprior_te Function for the prior distribution of extinction time.
+#' @param alpha Fixed shape parameter for the non-homogeneous process.
 #'
-#' @return
+#' @return Bayes factor comparing persistence to extinction.
 #' @export
 #'
-#' @examples
 compute_bayes_factor_kodikara2020_fixed_alpha <- function(sightings, start_year, end_year, dprior_m, dprior_te, alpha) {
   t <- (sightings - start_year) / (end_year - start_year)
 
   # Likelihood of data given no extinction
 
-  likelyhood_h0 <- function(t) {
-    compute_likelyhood_extinction_at_te_kodikara_fixed_alpha(
+  likelihood_h0 <- function(t) {
+    compute_likelihood_extinction_at_te_kodikara_fixed_alpha(
       t,
       te = 1,
       dprior_m,
@@ -26,11 +27,11 @@ compute_bayes_factor_kodikara2020_fixed_alpha <- function(sightings, start_year,
   # Likelihood of data given extinction
 
 
-  likelyhood_h1 <- function(t) {
+  likelihood_h1 <- function(t) {
     integrate(
       Vectorize(
         function(te) {
-          compute_likelyhood_extinction_at_te_kodikara_fixed_alpha(
+          compute_likelihood_extinction_at_te_kodikara_fixed_alpha(
             t,
             te,
             dprior_m,
@@ -45,7 +46,7 @@ compute_bayes_factor_kodikara2020_fixed_alpha <- function(sightings, start_year,
     )$value
   }
 
-  likelyhood_h0(t) / likelyhood_h1(t)
+  likelihood_h0(t) / likelihood_h1(t)
 
 
 }

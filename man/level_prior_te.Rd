@@ -2,13 +2,23 @@
 % Please edit documentation in R/level_prior_te.R
 \name{level_prior_te}
 \alias{level_prior_te}
-\title{Level Prior extinction time}
+\title{Convert an extinction posterior curve into a prior function}
 \usage{
-level_prior_te(te)
+level_prior_te(te, t_start, t_stop, extinction_posterior)
 }
 \arguments{
-\item{te}{extinction time}
+\item{te}{Scaled extinction time, between 0 and 1.}
+
+\item{t_start}{First year of the study period.}
+
+\item{t_stop}{Last year of the study period.}
+
+\item{extinction_posterior}{Numeric vector of posterior extant probabilities
+evaluated for each year from \code{t_start} to \code{t_stop}.}
+}
+\value{
+Prior density evaluated at \code{te}.
 }
 \description{
-Level Prior extinction time
+Convert an extinction posterior curve into a prior function
 }

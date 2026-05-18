@@ -1,12 +1,11 @@
 #' Select the first n observations to retain
 #'
-#' @param vec
-#' @param n
+#' @param sightings Numeric vector of sighting years.
+#' @param n Number of observations to keep.
 #'
-#' @return
+#' @return The first `n` observations from `sightings`.
 #' @export
 #'
-#' @examples
 select_first_n_observations <- function(sightings, n) {
   return(sightings[1:n])
 

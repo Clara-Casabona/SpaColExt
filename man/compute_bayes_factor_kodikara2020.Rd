@@ -23,9 +23,12 @@ compute_bayes_factor_kodikara2020(
 
 \item{dprior_te}{function to estimate the prior extinction time}
 }
+\value{
+Bayes factor comparing persistence to extinction.
+}
 \description{
 Compute Bayes factor following a non-homogeneous Poisson process.
 }
 \examples{
-compute_bayes_factor_kodikara2020(sightings = c(1901,1902,1903,1905,1908,1910), start_year = 1900, end_year = 1920, dprior_m =solowdprior_m, dprior_te = solowdprior_te)
+compute_bayes_factor_kodikara2020(sightings = c(1901,1902,1903,1905,1908,1910), start_year = 1900, end_year = 1920, dprior_m = solowdprior_m, dprior_te = solowdprior_te)
 }

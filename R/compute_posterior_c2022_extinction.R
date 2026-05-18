@@ -6,10 +6,9 @@
 #' @param prior_te   flexible function - add prior extinction rate distribution
 #' @param prior_m    flexible function - add prior observation rate distribution
 #'
-#' @return
+#' @return Numeric vector of posterior extant probabilities by year.
 #' @export
 #'
-#' @examples
 
 compute_posterior_c2022_extinction <- function(sightings, start_year, stop_year, prior_te = NULL, prior_m = NULL) {
 

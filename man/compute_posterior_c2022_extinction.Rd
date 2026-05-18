@@ -23,6 +23,9 @@ compute_posterior_c2022_extinction(
 
 \item{prior_m}{flexible function - add prior observation rate distribution}
 }
+\value{
+Numeric vector of posterior extant probabilities by year.
+}
 \description{
 Compute  Posterior Extinction with informative priors
 }

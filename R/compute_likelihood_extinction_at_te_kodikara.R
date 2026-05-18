@@ -1,5 +1,5 @@
 
-#' Compute extinction likelihood a extinction time
+#' Compute extinction likelihood at an extinction time
 #'
 #' @param t number of sightings
 #' @param te extinction time
@@ -8,9 +8,8 @@
 #' @return extinction likelihood at a specific extinction time
 #' @export
 #'
-#' @examples
 #'
-compute_likelyhood_extinction_at_te_kodikara <- function(t, te, dprior_m) {
+compute_likelihood_extinction_at_te_kodikara <- function(t, te, dprior_m) {
     n = length(t)
     integrate(
       Vectorize(function(alpha) {
@@ -21,3 +20,10 @@ compute_likelyhood_extinction_at_te_kodikara <- function(t, te, dprior_m) {
       abs.tol = 1e-8
     )$value
   }
+
+#' @rdname compute_likelihood_extinction_at_te_kodikara
+#' @export
+compute_likelyhood_extinction_at_te_kodikara <- function(t, te, dprior_m) {
+  .Deprecated("compute_likelihood_extinction_at_te_kodikara")
+  compute_likelihood_extinction_at_te_kodikara(t = t, te = te, dprior_m = dprior_m)
+}

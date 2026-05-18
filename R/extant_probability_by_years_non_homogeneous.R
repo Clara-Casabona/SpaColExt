@@ -1,4 +1,4 @@
-#' Extant Posterior Probability sequence by years folowing non homogeneous
+#' Extant posterior probability sequence by year following a non-homogeneous process
 #'
 #' @param start_year  Year at which we want to estimate the extant posterior probability
 #' @param stop_year   Year at which we stop to estimate the extant  posterior probability
@@ -7,9 +7,8 @@
 #' @return Vector with the extant probabilities
 #' @export
 #'
-#' @examples
 #'
-posterior_probability_extinction_non_homogeneos_varying_end_year = function(sightings, start_year, stop_year) {
+posterior_probability_extinction_non_homogeneous_varying_end_year = function(sightings, start_year, stop_year) {
 
   if( any(is.na(sightings)) ) return(NA)
 
@@ -31,4 +30,15 @@ posterior_probability_extinction_non_homogeneos_varying_end_year = function(sigh
     }
   )(analysis_interval)
 
+}
+
+#' @rdname posterior_probability_extinction_non_homogeneous_varying_end_year
+#' @export
+posterior_probability_extinction_non_homogeneos_varying_end_year = function(sightings, start_year, stop_year) {
+  .Deprecated("posterior_probability_extinction_non_homogeneous_varying_end_year")
+  posterior_probability_extinction_non_homogeneous_varying_end_year(
+    sightings = sightings,
+    start_year = start_year,
+    stop_year = stop_year
+  )
 }

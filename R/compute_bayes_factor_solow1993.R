@@ -17,8 +17,8 @@ compute_bayes_factor_solow1993 <- function(sightings, start_year, end_year, dpri
 
   # Likelihood of data given no extinction
 
-  likelyhood_h0 <- function(t) {
-    compute_likelyhood_extinction_at_te(
+  likelihood_h0 <- function(t) {
+    compute_likelihood_extinction_at_te(
       t,
       te = 1,
       dprior_m
@@ -27,11 +27,11 @@ compute_bayes_factor_solow1993 <- function(sightings, start_year, end_year, dpri
 
   # Likelihood of data given extinction
 
-  likelyhood_h1 <- function(t) {
+  likelihood_h1 <- function(t) {
     integrate(
       Vectorize(
         function(te) {
-          compute_likelyhood_extinction_at_te(
+          compute_likelihood_extinction_at_te(
             t,
             te,
             dprior_m
@@ -44,6 +44,6 @@ compute_bayes_factor_solow1993 <- function(sightings, start_year, end_year, dpri
     )$value
   }
 
-  likelyhood_h0(t) / likelyhood_h1(t)
+  likelihood_h0(t) / likelihood_h1(t)
 
 }

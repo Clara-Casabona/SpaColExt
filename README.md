@@ -1,102 +1,122 @@
+<!-- README.md is generated from README.Rmd. Please edit that file. -->
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 
 # SpaColExt
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/Clara-Casabona/SpaColExt/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Clara-Casabona/SpaColExt/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 <!-- badges: end -->
 
-The goal of SpaColExt R package is to infer spatial colonization and
-extinction dates of species accounting for the spatial heterogeneity of
-the data. It uses a Bayesian approach to estimate the probability of
-species still extant through the time a different spatial level.
+SpaColExt is an R package for inferring extinction and colonization dates from species sighting records. It focuses on Bayesian extinction inference through time and across spatial units, with tools for:
 
-We use the Bayesian functions from [Solow
-1993](https://www.jstor.org/stable/1940821?seq=1) and we will also add
-the [Solow & Beet
-2014](https://www.researchgate.net/publication/262387815_On_Uncertain_Sightings_and_Inference_about_Extinction)
-functions to incorporate the certainty and uncertainty of the data.
+- estimating posterior extant probabilities from sighting years;
+- applying Solow-style Bayesian extinction estimators;
+- evaluating posterior probabilities over a sequence of possible end years;
+- applying the same workflow independently across spatial cells;
+- exploring informative priors for extinction time and observation rate.
 
-In this moment I’m adding a non-homogeneous Poisson processes inspired
-from [Kodikara
-2020](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13542)
+The package currently implements methods based on Solow (1993), with experimental non-homogeneous observation-rate functions inspired by Kodikara et al. (2020). Solow and Beet (2014)-style uncertain sighting support is planned but not yet part of the stable workflow.
 
 ## Installation
 
-You can install the development version of SpaColExt from
-[GitHub](https://github.com/) with:
+You can install the development version from GitHub:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("Clara-Casabona/SpaColExt")
+# install.packages("remotes")
+remotes::install_github("Clara-Casabona/SpaColExt")
 ```
 
-## Some notes:
-
-This package is in development. I need to:
-
-- Add spatial prior information
-
-- Add non-homogeneous poisson processes
-
-- Add colonization fonctions
-
-## Example 1
-
-This is a basic example which shows you how to estimate the posterior
-distribution of the extant probability of a extinct species:
+Load the package with:
 
 ``` r
 library(SpaColExt)
+```
 
-## basic example code
-sightings = c(1901,1902,1903,1905,1908,1910)
-start_year = 1900
-end_year = 1920
-dprior_m = function(m) 1 / m
-dprior_te = function(te) 1
-prior =0.5
+## Basic Workflow
 
-compute_posterior_solow1993(sightings = sightings, 
-                            start_year = start_year,
-                            end_year = end_year, 
-                            dprior_m = dprior_m ,
-                            dprior_te = dprior_te,
-                            prior = prior)
+The main input is a numeric vector of sighting years. In the simplest case, `compute_posterior_solow1993()` returns the posterior probability that the species is still extant at the end of the study interval.
+
+
+``` r
+sightings <- c(1901, 1902, 1903, 1905, 1908, 1910)
+start_year <- 1900
+end_year <- 1920
+
+compute_posterior_solow1993(
+  sightings = sightings,
+  start_year = start_year,
+  end_year = end_year,
+  dprior_m = solowdprior_m,
+  dprior_te = solowdprior_te,
+  prior = 0.5
+)
 #> [1] 0.1388889
 ```
 
-## Example 2
+## Posterior Probability Through Time
 
-This is a basic example which shows you how to estimate the posterior
-distribution of the extant probability of an extinct species in
-different sites:
+Use `posterior_probability_extinction_varying_end_year()` to evaluate the posterior extant probability for every year in a study period.
+
 
 ``` r
-library(SpaColExt)
+posterior <- posterior_probability_extinction_varying_end_year(
+  sightings = sightings,
+  start_year = start_year,
+  stop_year = end_year
+)
 
-## Creating data in a matrix 2x2
-data = list(c(1880, 1883, 1895, 1897, 1899), NA, NA, c(1882, 1884, 1896, 1898))
-dim(data) <- c(2, 2)
+data.frame(
+  year = seq(start_year, end_year),
+  extant_probability = posterior
+)
+#>    year extant_probability
+#> 1  1900          1.0000000
+#> 2  1901          1.0000000
+#> 3  1902          1.0000000
+#> 4  1903          1.0000000
+#> 5  1904          1.0000000
+#> 6  1905          1.0000000
+#> 7  1906          1.0000000
+#> 8  1907          1.0000000
+#> 9  1908          1.0000000
+#> 10 1909          1.0000000
+#> 11 1910          1.0000000
+#> 12 1911          0.8911846
+#> 13 1912          0.7706155
+#> 14 1913          0.6482621
+#> 15 1914          0.5331491
+#> 16 1915          0.4312668
+#> 17 1916          0.3451666
+#> 18 1917          0.2747469
+#> 19 1918          0.2183818
+#> 20 1919          0.1738466
+#> 21 1920          0.1388889
+```
 
-## Using Solow 1993 priors
-dprior_m = function(m) 1 / m
-dprior_te = function(te) 1
-prior =0.5
+## Spatial Workflow
 
-## Study interval
-start_year = 1880
-stop_year = 1930
+Spatial analyses use a matrix-like object where each cell contains a vector of sighting years for one site. Cells with no observations can be set to `NA`.
 
 
-# Estimating extant probabilities
+``` r
+sighting_grid <- list(
+  c(1880, 1883, 1895, 1897, 1899),
+  NA,
+  NA,
+  c(1882, 1884, 1896, 1898)
+)
+dim(sighting_grid) <- c(2, 2)
 
-extant_probability = spatial_posterior_probability_extinction_varying_end_year(data, 
-                                                                               start_year=start_year,
-                                                                               stop_year=stop_year)
-## Output of one of the sites:
+spatial_posterior <- spatial_posterior_probability_extinction_varying_end_year(
+  sighting_grid,
+  start_year = 1880,
+  stop_year = 1930
+)
 
-extant_probability[1,1]
+spatial_posterior[1, 1]
 #> [[1]]
 #>  [1] 1.00000000 1.00000000 1.00000000 1.00000000 1.00000000 1.00000000
 #>  [7] 1.00000000 1.00000000 1.00000000 1.00000000 1.00000000 1.00000000
@@ -108,80 +128,82 @@ extant_probability[1,1]
 #> [43] 0.14882522 0.13682842 0.12594264 0.11605784 0.10707460 0.09890328
 #> [49] 0.09146330 0.08468226 0.07849524
 
-# Ploting the exant probability
-
-plot_posterior_distribution(extant_probability, start_year=start_year, stop_year=stop_year)
+plot_posterior_distribution(
+  spatial_posterior,
+  start_year = 1880,
+  stop_year = 1930
+)
 ```
 
-<img src="man/figures/README-example2-1.png" width="100%" />
+<div class="figure">
+<img src="man/figures/README-example-spatial-1.png" alt="plot of chunk example-spatial" width="100%" />
+<p class="caption">plot of chunk example-spatial</p>
+</div>
 
-With this example we estimate the probability that the species is extant
-in different sites considering that the observations are independent
-between the sites.
+## Informative Priors
 
-## Example 3 (In development)
+`compute_posterior_c2022_extinction()` allows custom priors for extinction time (`prior_te`) and observation rate (`prior_m`). This is useful when independent ecological or sampling information should influence the posterior.
 
-This is an example to estimate the posterior distribution of the extant
-probability of an extinct species in different sites, accounting for the
-heterogeneity in the observation rate. Using Kodikara 2020 function.
-
-## Example 4 (In development)
-
-This example will show you how to estimate the posterior distribution of
-the extant probability of an extinct species in different sites,
-assuming that the observations in one site are influenced by the
-observations in neighbours sites:
 
 ``` r
-library(SpaColExt)
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-library(ggplot2)
-#> 
-#> Attaching package: 'ggplot2'
-#> The following object is masked from 'package:SpaColExt':
-#> 
-#>     alpha
-library(ggpubr)
-set.seed(12)
+prior_te <- function(te) 1
+prior_m <- function(m) 1 / pmax(m, .Machine$double.eps)
 
-# Create a realistic data set of observations 
-n = 40 # number of years with observational data
-t_ext = 1940 # True extinction time
-t_start = t_ext - n #Year of the possible first observation
-t_stop = 2040 # End of the study period
-m_rate = 2 # mean time between sighting before extinction
-
-generate_data = function(t_start, t_ext, m_rate) {
-  sightings = t_start + unique(floor(cumsum(rexp(2*(t_ext-t_start)/m_rate, 1/m_rate))))
-  sightings[sightings<=t_ext]
-}
-
-sightings = generate_data(t_start, t_ext, m_rate) # Simulated sighting used to predict extinction in a specific place
-
-sightings2 = generate_data(t_start, t_ext+10, 1)  # Simulated sighting list to estimate the first posterior distribution of extinction date 
-
-
-posterior = compute_posterior_c2022_extinction(sightings2, t_start, t_stop)
-
-prior_te = approxfun(t_start:t_stop, 1-posterior) # IMPORTANT! The scaling still in progress! This might be modified in the next weeks. 
-
-prior_m = Vectorize(function(m) {
-  if(m > 10*m_rate) return(1e-6)
-  m_rate**m * exp(-m_rate) / gamma(m+1)
-})
-
-vizualize_priors_effects(t_start, t_stop, sightings, prior_te = prior_te, prior_m = prior_m)
-#> Joining with `by = join_by(year)`
-#> Joining with `by = join_by(year)`
-#> Joining with `by = join_by(year)`
+compute_posterior_c2022_extinction(
+  sightings = sightings,
+  start_year = start_year,
+  stop_year = end_year,
+  prior_te = prior_te,
+  prior_m = prior_m
+)
+#>  [1] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
+#>  [8] 1.0000000 1.0000000 1.0000000 1.0000000 0.8911846 0.7706155 0.6482621
+#> [15] 0.5331491 0.4312668 0.3451666 0.2747469 0.2183818 0.1738466 0.1388889
 ```
 
-<img src="man/figures/README-example3-1.png" width="100%" />
+You can also compare the effect of different prior combinations:
+
+
+``` r
+visualize_priors_effects(
+  t_start = start_year,
+  t_stop = end_year,
+  sightings = sightings,
+  prior_te = prior_te,
+  prior_m = prior_m
+)
+```
+
+<div class="figure">
+<img src="man/figures/README-example-prior-plot-1.png" alt="plot of chunk example-prior-plot" width="100%" />
+<p class="caption">plot of chunk example-prior-plot</p>
+</div>
+
+## Function Overview
+
+- `compute_posterior_solow1993()`: posterior extant probability for one study interval.
+- `posterior_probability_extinction_varying_end_year()`: posterior extant probabilities for a sequence of end years.
+- `spatial_posterior_probability_extinction_varying_end_year()`: applies the varying end-year workflow across spatial cells.
+- `plot_posterior_distribution()`: plots posterior extant probabilities through time.
+- `compute_posterior_c2022_extinction()`: posterior curve with optional informative priors.
+- `transform_and_reverse()`: helper for reversing sighting dates for colonization-oriented workflows.
+
+Experimental non-homogeneous functions are available, but their interface and numerical behavior may still change.
+
+## Development Status
+
+SpaColExt is under active development. The current maintenance priorities are:
+
+- add stable support for colonization-date inference;
+- formalize spatial dependence between neighbouring sites;
+- add support for uncertain sightings;
+- expand tests around the non-homogeneous observation-rate functions;
+- improve method references and vignettes for applied ecological workflows.
+
+## References
+
+Solow, A. R. (1993). Inferring extinction from sighting data. *Ecology*, 74(3), 962-964.
+
+Solow, A. R. and Beet, A. R. (2014). On uncertain sightings and inference about extinction. *Conservation Biology*, 28(4), 1119-1123.
+
+Kodikara, S., et al. (2020). Non-homogeneous sighting processes for extinction inference. *Methods in Ecology and Evolution*.

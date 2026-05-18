@@ -6,7 +6,6 @@
 #' @return function prior m
 #' @export
 #'
-#' @examples
 solowdprior_m = function(m){
 1 / m
 }

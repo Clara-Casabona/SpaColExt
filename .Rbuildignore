@@ -1,4 +1,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^LICENSE\.md$
+^\.codex$
+^\.agents$
+^\.github$
+^output$
+^scripts$
+^\.\.Rcheck$
 ^README\.Rmd$
