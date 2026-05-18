@@ -128,6 +128,16 @@ ggplot2::ggplot(posterior_df, ggplot2::aes(year, extant_probability)) +
 
 Spatial analyses use a matrix-like object where each cell contains a vector of sighting years for one site. Cells with no observations can be set to `NA`.
 
+By default, spatial cells are treated independently. SpaColExt also includes a simple neighbour-informed adjustment for cases where adjacent cells are expected to have similar extinction or persistence dynamics. This is not a full Bayesian spatial hierarchical model. It is a transparent spatial smoothing step applied after local posterior curves have been estimated:
+
+$$
+\text{logit}(p_i^{spatial}(t)) =
+(1 - \rho)\text{logit}(p_i(t)) +
+\rho \frac{1}{|N_i|}\sum_{j \in N_i}\text{logit}(p_j(t))
+$$
+
+where $p_i(t)$ is the local posterior probability in cell $i$, $N_i$ is the set of neighbouring cells, and $\rho$ controls neighbour influence. When $\rho = 0$, the result is the independent local posterior. Larger values borrow more information from adjacent cells.
+
 
 ``` r
 sighting_grid <- list(
@@ -144,23 +154,27 @@ spatial_posterior <- spatial_posterior_probability_extinction_varying_end_year(
   stop_year = 1930
 )
 
-final_probability <- matrix(
-  vapply(
-    as.vector(spatial_posterior),
-    function(x) {
-      if (length(x) == 1 && is.na(x)) return(NA_real_)
-      tail(x, 1)
-    },
-    numeric(1)
-  ),
-  nrow = 4,
-  ncol = 4
+spatial_posterior_smoothed <- smooth_spatial_posterior(
+  spatial_posterior,
+  rho = 0.35
 )
 
-grid_df <- data.frame(
-  row = rep(seq_len(nrow(final_probability)), times = ncol(final_probability)),
-  col = rep(seq_len(ncol(final_probability)), each = nrow(final_probability)),
-  extant_probability = as.vector(final_probability)
+independent_grid <- final_year_probability_grid(spatial_posterior)
+smoothed_grid <- final_year_probability_grid(spatial_posterior_smoothed)
+
+grid_df <- rbind(
+  data.frame(
+    row = rep(seq_len(nrow(independent_grid)), times = ncol(independent_grid)),
+    col = rep(seq_len(ncol(independent_grid)), each = nrow(independent_grid)),
+    extant_probability = as.vector(independent_grid),
+    model = "Independent cells"
+  ),
+  data.frame(
+    row = rep(seq_len(nrow(smoothed_grid)), times = ncol(smoothed_grid)),
+    col = rep(seq_len(ncol(smoothed_grid)), each = nrow(smoothed_grid)),
+    extant_probability = as.vector(smoothed_grid),
+    model = "Neighbour-informed"
+  )
 )
 
 ggplot2::ggplot(grid_df, ggplot2::aes(col, row, fill = extant_probability)) +
@@ -178,6 +192,7 @@ ggplot2::ggplot(grid_df, ggplot2::aes(col, row, fill = extant_probability)) +
     name = "P(extant)"
   ) +
   ggplot2::coord_equal() +
+  ggplot2::facet_wrap(~model) +
   ggplot2::theme_bw(base_size = 10) +
   ggplot2::theme(panel.grid = ggplot2::element_blank()) +
   ggplot2::labs(x = "Column", y = "Row")
@@ -188,7 +203,7 @@ ggplot2::ggplot(grid_df, ggplot2::aes(col, row, fill = extant_probability)) +
 <p class="caption">plot of chunk example-spatial</p>
 </div>
 
-This grid summarizes the posterior probability of persistence in the final year of the study period for each spatial cell. Empty cells represent sites without enough sightings.
+These grids summarize the posterior probability of persistence in the final year of the study period. The neighbour-informed version partially pools each cell with its rook neighbours. This can stabilize isolated cells with sparse observations, but it should be interpreted as spatial smoothing rather than proof of dispersal or local demographic coupling.
 
 ## Colonization by Time Reversal
 
@@ -285,6 +300,9 @@ visualize_priors_effects(
 - `posterior_probability_extinction_varying_end_year()`: posterior extant probabilities for a sequence of end years.
 - `posterior_probability_colonization_varying_year()`: posterior colonization probabilities using time reversal.
 - `spatial_posterior_probability_extinction_varying_end_year()`: applies the varying end-year workflow across spatial cells.
+- `make_grid_adjacency()`: creates a neighbour list for a regular grid.
+- `smooth_spatial_posterior()`: applies neighbour-informed smoothing to spatial posterior curves.
+- `final_year_probability_grid()`: extracts final-year probabilities for spatial plotting.
 - `plot_posterior_distribution()`: plots posterior extant probabilities through time.
 - `compute_posterior_c2022_extinction()`: posterior curve with optional informative priors.
 - `transform_and_reverse()`: helper for reversing sighting dates for colonization-oriented workflows.

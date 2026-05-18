@@ -75,3 +75,27 @@ test_that("deprecated misspelled aliases still work during transition", {
 
   expect_equal(old, new)
 })
+
+test_that("grid adjacency uses rook neighbours by default", {
+  adjacency <- make_grid_adjacency(3, 3)
+
+  expect_equal(adjacency[[1]], c(2L, 4L))
+  expect_equal(sort(adjacency[[5]]), c(2L, 4L, 6L, 8L))
+})
+
+test_that("spatial smoothing preserves dimensions and changes local curves", {
+  posterior <- list(
+    c(0.9, 0.8, 0.7),
+    c(0.2, 0.2, 0.2),
+    c(0.9, 0.8, 0.7),
+    c(0.9, 0.8, 0.7)
+  )
+  dim(posterior) <- c(2, 2)
+
+  smoothed <- smooth_spatial_posterior(posterior, rho = 0.5)
+
+  expect_equal(dim(smoothed), c(2L, 2L))
+  expect_true(smoothed[[2]][1] > posterior[[2]][1])
+  expect_true(all(final_year_probability_grid(smoothed) >= 0))
+  expect_true(all(final_year_probability_grid(smoothed) <= 1))
+})
