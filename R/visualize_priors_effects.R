@@ -42,10 +42,15 @@ visualize_priors_effects <- function(t_start, t_stop, sightings, prior_te, prior
   )
 
   ggplot2::ggplot(posterior, ggplot2::aes(x = year, y = value, color = posterior)) +
-    ggplot2::geom_line() +
-    ggplot2::theme_bw() +
+    ggplot2::geom_line(ggplot2::aes(linetype = posterior), linewidth = 0.8) +
+    ggplot2::theme_bw(base_size = 10) +
     ggplot2::scale_color_manual(values = c("#0072B2", "#009E73", "#D55E00", "#CC79A7")) +
-    ggplot2::labs(x = "Year", y = "Extant probability", color = "Prior scenario")
+    ggplot2::labs(
+      x = "Year",
+      y = "Extant probability",
+      color = "Prior scenario",
+      linetype = "Prior scenario"
+    )
 }
 
 #' @rdname visualize_priors_effects

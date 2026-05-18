@@ -24,30 +24,30 @@ The package currently implements methods based on Solow (1993), with experimenta
 
 The core output of SpaColExt is a posterior probability, usually interpreted as the probability that a species is still extant at a given time conditional on the observed sighting record:
 
-\[
+$$
 P(H_0 \mid D) =
 \left(1 + \frac{1 - \pi}{\pi B(D)}\right)^{-1}
-\]
+$$
 
-where \(H_0\) is the hypothesis that the species is extant, \(D\) is the sighting record, \(\pi\) is the prior probability of persistence, and \(B(D)\) is the Bayes factor comparing persistence to extinction.
+where $H_0$ is the hypothesis that the species is extant, $D$ is the sighting record, $\pi$ is the prior probability of persistence, and $B(D)$ is the Bayes factor comparing persistence to extinction.
 
 For the non-homogeneous observation process, the package follows the idea that sighting intensity may vary through time:
 
-\[
+$$
 \lambda(t) = \alpha m^\alpha t^{\alpha - 1}
-\]
+$$
 
-Here, \(m\) controls the observation rate and \(\alpha\) controls the shape of the observation process through time. The value \(\alpha = 1\) corresponds to a homogeneous process, equivalent to assuming constant observation intensity. Values above or below 1 represent increasing or decreasing observation intensity through time.
+Here, $m$ controls the observation rate and $\alpha$ controls the shape of the observation process through time. The value $\alpha = 1$ corresponds to a homogeneous process, equivalent to assuming constant observation intensity. Values above or below 1 represent increasing or decreasing observation intensity through time.
 
-In ecological applications, \(\alpha\) should not be interpreted as sampling effort itself. A safer interpretation is that \(\alpha\) is a shape parameter informed by sampling effort, used to represent temporal heterogeneity in detectability or observation intensity. For example, if eBird checklist effort increases strongly through time, using \(\alpha > 1\) can make the observation process more consistent with increasing search effort.
+In ecological applications, $\alpha$ should not be interpreted as sampling effort itself. A safer interpretation is that $\alpha$ is a shape parameter informed by sampling effort, used to represent temporal heterogeneity in detectability or observation intensity. For example, if eBird checklist effort increases strongly through time, using $\alpha > 1$ can make the observation process more consistent with increasing search effort.
 
-One possible empirical calibration is to fit a relationship between yearly effort \(E_t\) and scaled time:
+One possible empirical calibration is to fit a relationship between yearly effort $E_t$ and scaled time:
 
-\[
+$$
 \log(E_t) = c + (\alpha - 1)\log(t)
-\]
+$$
 
-This treats \(\alpha\) as a compact summary of temporal change in effort. This approach is still experimental and should be reported as an effort-informed sensitivity analysis unless the calibration is explicitly validated.
+This treats $\alpha$ as a compact summary of temporal change in effort. This approach is still experimental and should be reported as an effort-informed sensitivity analysis unless the calibration is explicitly validated.
 
 ## Installation
 
@@ -238,10 +238,16 @@ The dashed line shows the simulated colonization year. In real applications this
 
 `compute_posterior_c2022_extinction()` allows custom priors for extinction time (`prior_te`) and observation rate (`prior_m`). This is useful when independent ecological or sampling information should influence the posterior.
 
+The priors below are intentionally informative so their effect is visible. A flat prior such as `function(te) 1` and the Solow prior `function(m) 1 / m` reproduce the default model, so all curves would overlap.
+
 
 ``` r
-prior_te <- function(te) 1
-prior_m <- function(m) 1 / pmax(m, .Machine$double.eps)
+prior_te <- function(te) stats::dnorm(te, mean = 1913, sd = 3)
+prior_m <- function(m) stats::dlnorm(
+  pmax(m, .Machine$double.eps),
+  meanlog = log(2),
+  sdlog = 0.45
+)
 
 compute_posterior_c2022_extinction(
   sightings = sightings,
@@ -251,8 +257,8 @@ compute_posterior_c2022_extinction(
   prior_m = prior_m
 )
 #>  [1] 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000 1.0000000
-#>  [8] 1.0000000 1.0000000 1.0000000 1.0000000 0.8911846 0.7706155 0.6482621
-#> [15] 0.5331491 0.4312668 0.3451666 0.2747469 0.2183818 0.1738466 0.1388889
+#>  [8] 1.0000000 1.0000000 1.0000000 1.0000000 0.9901022 0.9770009 0.9617896
+#> [15] 0.9457864 0.9301357 0.9155577 0.9023137 0.8903313 0.8793818 0.8692228
 ```
 
 You can also compare the effect of different prior combinations:
