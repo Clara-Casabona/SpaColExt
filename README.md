@@ -20,6 +20,35 @@ SpaColExt is an R package for inferring extinction and colonization dates from s
 
 The package currently implements methods based on Solow (1993), with experimental non-homogeneous observation-rate functions inspired by Kodikara et al. (2020). Solow and Beet (2014)-style uncertain sighting support is planned but not yet part of the stable workflow.
 
+## Model Interpretation
+
+The core output of SpaColExt is a posterior probability, usually interpreted as the probability that a species is still extant at a given time conditional on the observed sighting record:
+
+\[
+P(H_0 \mid D) =
+\left(1 + \frac{1 - \pi}{\pi B(D)}\right)^{-1}
+\]
+
+where \(H_0\) is the hypothesis that the species is extant, \(D\) is the sighting record, \(\pi\) is the prior probability of persistence, and \(B(D)\) is the Bayes factor comparing persistence to extinction.
+
+For the non-homogeneous observation process, the package follows the idea that sighting intensity may vary through time:
+
+\[
+\lambda(t) = \alpha m^\alpha t^{\alpha - 1}
+\]
+
+Here, \(m\) controls the observation rate and \(\alpha\) controls the shape of the observation process through time. The value \(\alpha = 1\) corresponds to a homogeneous process, equivalent to assuming constant observation intensity. Values above or below 1 represent increasing or decreasing observation intensity through time.
+
+In ecological applications, \(\alpha\) should not be interpreted as sampling effort itself. A safer interpretation is that \(\alpha\) is a shape parameter informed by sampling effort, used to represent temporal heterogeneity in detectability or observation intensity. For example, if eBird checklist effort increases strongly through time, using \(\alpha > 1\) can make the observation process more consistent with increasing search effort.
+
+One possible empirical calibration is to fit a relationship between yearly effort \(E_t\) and scaled time:
+
+\[
+\log(E_t) = c + (\alpha - 1)\log(t)
+\]
+
+This treats \(\alpha\) as a compact summary of temporal change in effort. This approach is still experimental and should be reported as an effort-informed sensitivity analysis unless the calibration is explicitly validated.
+
 ## Installation
 
 You can install the development version from GitHub:
@@ -68,33 +97,32 @@ posterior <- posterior_probability_extinction_varying_end_year(
   stop_year = end_year
 )
 
-data.frame(
+posterior_df <- data.frame(
   year = seq(start_year, end_year),
   extant_probability = posterior
 )
-#>    year extant_probability
-#> 1  1900          1.0000000
-#> 2  1901          1.0000000
-#> 3  1902          1.0000000
-#> 4  1903          1.0000000
-#> 5  1904          1.0000000
-#> 6  1905          1.0000000
-#> 7  1906          1.0000000
-#> 8  1907          1.0000000
-#> 9  1908          1.0000000
-#> 10 1909          1.0000000
-#> 11 1910          1.0000000
-#> 12 1911          0.8911846
-#> 13 1912          0.7706155
-#> 14 1913          0.6482621
-#> 15 1914          0.5331491
-#> 16 1915          0.4312668
-#> 17 1916          0.3451666
-#> 18 1917          0.2747469
-#> 19 1918          0.2183818
-#> 20 1919          0.1738466
-#> 21 1920          0.1388889
+
+head(posterior_df)
+#>   year extant_probability
+#> 1 1900                  1
+#> 2 1901                  1
+#> 3 1902                  1
+#> 4 1903                  1
+#> 5 1904                  1
+#> 6 1905                  1
+
+ggplot2::ggplot(posterior_df, ggplot2::aes(year, extant_probability)) +
+  ggplot2::geom_line(linewidth = 0.8, color = "#0072B2") +
+  ggplot2::geom_point(size = 1.7, color = "#0072B2") +
+  ggplot2::coord_cartesian(ylim = c(0, 1)) +
+  ggplot2::theme_bw(base_size = 10) +
+  ggplot2::labs(x = "Year", y = "Posterior extant probability")
 ```
+
+<div class="figure">
+<img src="man/figures/README-example-varying-end-year-1.png" alt="plot of chunk example-varying-end-year" width="70%" />
+<p class="caption">plot of chunk example-varying-end-year</p>
+</div>
 
 ## Spatial Workflow
 
@@ -103,12 +131,12 @@ Spatial analyses use a matrix-like object where each cell contains a vector of s
 
 ``` r
 sighting_grid <- list(
-  c(1880, 1883, 1895, 1897, 1899),
-  NA,
-  NA,
-  c(1882, 1884, 1896, 1898)
+  c(1880, 1883, 1895, 1897, 1899), c(1881, 1884, 1892, 1901), NA, NA,
+  c(1882, 1888, 1894, 1898), c(1885, 1892, 1902, 1910), c(1887, 1899, 1905), NA,
+  NA, c(1890, 1895, 1901), c(1892, 1898, 1904, 1912), c(1894, 1902, 1914),
+  NA, c(1898, 1904), c(1901, 1908, 1916), c(1902, 1910, 1920)
 )
-dim(sighting_grid) <- c(2, 2)
+dim(sighting_grid) <- c(4, 4)
 
 spatial_posterior <- spatial_posterior_probability_extinction_varying_end_year(
   sighting_grid,
@@ -116,29 +144,95 @@ spatial_posterior <- spatial_posterior_probability_extinction_varying_end_year(
   stop_year = 1930
 )
 
-spatial_posterior[1, 1]
-#> [[1]]
-#>  [1] 1.00000000 1.00000000 1.00000000 1.00000000 1.00000000 1.00000000
-#>  [7] 1.00000000 1.00000000 1.00000000 1.00000000 1.00000000 1.00000000
-#> [13] 1.00000000 1.00000000 1.00000000 1.00000000 1.00000000 1.00000000
-#> [19] 1.00000000 1.00000000 0.94613250 0.89040796 0.83376225 0.77710330
-#> [25] 0.72126176 0.66695497 0.61476592 0.56513632 0.51837127 0.47465226
-#> [31] 0.43405500 0.39656930 0.36211871 0.33057853 0.30179141 0.27558009
-#> [37] 0.25175760 0.23013486 0.21052632 0.19275375 0.17664878 0.16205431
-#> [43] 0.14882522 0.13682842 0.12594264 0.11605784 0.10707460 0.09890328
-#> [49] 0.09146330 0.08468226 0.07849524
-
-plot_posterior_distribution(
-  spatial_posterior,
-  start_year = 1880,
-  stop_year = 1930
+final_probability <- matrix(
+  vapply(
+    as.vector(spatial_posterior),
+    function(x) {
+      if (length(x) == 1 && is.na(x)) return(NA_real_)
+      tail(x, 1)
+    },
+    numeric(1)
+  ),
+  nrow = 4,
+  ncol = 4
 )
+
+grid_df <- data.frame(
+  row = rep(seq_len(nrow(final_probability)), times = ncol(final_probability)),
+  col = rep(seq_len(ncol(final_probability)), each = nrow(final_probability)),
+  extant_probability = as.vector(final_probability)
+)
+
+ggplot2::ggplot(grid_df, ggplot2::aes(col, row, fill = extant_probability)) +
+  ggplot2::geom_tile(color = "white", linewidth = 0.8) +
+  ggplot2::geom_text(
+    ggplot2::aes(label = ifelse(is.na(extant_probability), "", sprintf("%.2f", extant_probability))),
+    size = 3
+  ) +
+  ggplot2::scale_y_reverse(breaks = seq_len(4)) +
+  ggplot2::scale_x_continuous(breaks = seq_len(4)) +
+  ggplot2::scale_fill_viridis_c(
+    option = "C",
+    limits = c(0, 1),
+    na.value = "grey92",
+    name = "P(extant)"
+  ) +
+  ggplot2::coord_equal() +
+  ggplot2::theme_bw(base_size = 10) +
+  ggplot2::theme(panel.grid = ggplot2::element_blank()) +
+  ggplot2::labs(x = "Column", y = "Row")
 ```
 
 <div class="figure">
-<img src="man/figures/README-example-spatial-1.png" alt="plot of chunk example-spatial" width="100%" />
+<img src="man/figures/README-example-spatial-1.png" alt="plot of chunk example-spatial" width="65%" />
 <p class="caption">plot of chunk example-spatial</p>
 </div>
+
+This grid summarizes the posterior probability of persistence in the final year of the study period for each spatial cell. Empty cells represent sites without enough sightings.
+
+## Colonization by Time Reversal
+
+Colonization can be treated as the temporal mirror of extinction. If a species is absent before colonization and present after colonization, reversing the time axis turns the problem into an extinction-like problem. SpaColExt uses this idea in `posterior_probability_colonization_varying_year()`.
+
+
+``` r
+set.seed(42)
+
+colonization_start_year <- 1980
+colonization_stop_year <- 2020
+true_colonization_year <- 1998
+
+colonization_sightings <- sort(unique(
+  true_colonization_year + floor(cumsum(stats::rexp(20, rate = 0.35)))
+))
+colonization_sightings <- colonization_sightings[colonization_sightings <= colonization_stop_year]
+
+colonization_posterior <- posterior_probability_colonization_varying_year(
+  sightings = colonization_sightings,
+  start_year = colonization_start_year,
+  stop_year = colonization_stop_year
+)
+
+colonization_df <- data.frame(
+  year = seq(colonization_start_year, colonization_stop_year),
+  colonization_probability = colonization_posterior
+)
+
+ggplot2::ggplot(colonization_df, ggplot2::aes(year, colonization_probability)) +
+  ggplot2::geom_line(linewidth = 0.8, color = "#009E73") +
+  ggplot2::geom_point(size = 1.6, color = "#009E73") +
+  ggplot2::geom_vline(xintercept = true_colonization_year, linetype = "dashed", color = "grey40") +
+  ggplot2::coord_cartesian(ylim = c(0, 1)) +
+  ggplot2::theme_bw(base_size = 10) +
+  ggplot2::labs(x = "Year", y = "Posterior colonization probability")
+```
+
+<div class="figure">
+<img src="man/figures/README-example-colonization-1.png" alt="plot of chunk example-colonization" width="70%" />
+<p class="caption">plot of chunk example-colonization</p>
+</div>
+
+The dashed line shows the simulated colonization year. In real applications this year is unknown; the curve should be interpreted as the posterior probability that colonization had already occurred by each year.
 
 ## Informative Priors
 
@@ -175,7 +269,7 @@ visualize_priors_effects(
 ```
 
 <div class="figure">
-<img src="man/figures/README-example-prior-plot-1.png" alt="plot of chunk example-prior-plot" width="100%" />
+<img src="man/figures/README-example-prior-plot-1.png" alt="plot of chunk example-prior-plot" width="70%" />
 <p class="caption">plot of chunk example-prior-plot</p>
 </div>
 
@@ -183,6 +277,7 @@ visualize_priors_effects(
 
 - `compute_posterior_solow1993()`: posterior extant probability for one study interval.
 - `posterior_probability_extinction_varying_end_year()`: posterior extant probabilities for a sequence of end years.
+- `posterior_probability_colonization_varying_year()`: posterior colonization probabilities using time reversal.
 - `spatial_posterior_probability_extinction_varying_end_year()`: applies the varying end-year workflow across spatial cells.
 - `plot_posterior_distribution()`: plots posterior extant probabilities through time.
 - `compute_posterior_c2022_extinction()`: posterior curve with optional informative priors.

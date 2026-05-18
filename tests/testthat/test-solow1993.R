@@ -43,6 +43,18 @@ test_that("colonization transform uses explicit study bounds", {
   )
 })
 
+test_that("colonization posterior returns one probability per year", {
+  posterior <- posterior_probability_colonization_varying_year(
+    sightings = c(2002, 2004, 2008, 2012),
+    start_year = 1980,
+    stop_year = 2020
+  )
+
+  expect_length(posterior, 41)
+  expect_true(all(posterior >= 0 & posterior <= 1, na.rm = TRUE))
+  expect_equal(tail(posterior, 9), rep(1, 9))
+})
+
 test_that("deprecated misspelled aliases still work during transition", {
   scaled_sightings <- (c(1901, 1902, 1903, 1905, 1908, 1910) - 1900) / (1920 - 1900)
 
