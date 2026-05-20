@@ -55,6 +55,19 @@ test_that("colonization posterior returns one probability per year", {
   expect_equal(tail(posterior, 9), rep(1, 9))
 })
 
+test_that("posterior extinction-year quantile returns a plausible year", {
+  estimate <- posterior_extinction_year_quantile(
+    sightings = c(1992, 1995, 1998, 2001),
+    start_year = 1980,
+    stop_year = 2020,
+    method = "solow"
+  )
+
+  expect_type(estimate, "double")
+  expect_gt(estimate, 2001)
+  expect_lt(estimate, 2020)
+})
+
 test_that("deprecated misspelled aliases still work during transition", {
   scaled_sightings <- (c(1901, 1902, 1903, 1905, 1908, 1910) - 1900) / (1920 - 1900)
 

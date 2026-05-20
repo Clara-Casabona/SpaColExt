@@ -1,0 +1,2 @@
+"experiment","scenario","method","final_probability","probability_at_true_year","date_error","absolute_date_error","no_threshold_crossing","n_sightings"
+"colonization","increasing effort after colonization","Time_reversed_Solow",1,0.666,-1.54,2.64,0,8.8

@@ -1,0 +1,126 @@
+"scenario","method","prior","alpha","threshold","n_sightings","final_probability","date_error","absolute_date_error","no_threshold_crossing"
+"constant observation effort","Effort_te_median","uniform",0.6,-1,3.39393939393939,-1,0.515151515151515,2.93939393939394,0
+"constant observation effort","Solow_te_median","later_beta_2_1",1,-1,3.525,-1,-0.275,3.225,0
+"constant observation effort","Effort_te_median","uniform",1,-1,3.39393939393939,-1,-1.27272727272727,3.27272727272727,0
+"constant observation effort","Solow_te_median","uniform",1,-1,3.525,-1,-1.75,3.7,0
+"constant observation effort","Effort_te_median","uniform",1.5,-1,3.39393939393939,-1,-2.72727272727273,3.81818181818182,0
+"constant observation effort","Solow_te_median","earlier_beta_1_2",1,-1,3.525,-1,-3.3,4.05,0
+"constant observation effort","Effort_te_median","uniform",1.8,-1,3.39393939393939,-1,-3.3030303030303,4.09090909090909,0
+"constant observation effort","Solow","later_beta_2_1",1,0.6,3.525,0.276249490042619,0,4.6,0
+"constant observation effort","Effort_fixed_alpha","uniform",1.8,0.5,3.39393939393939,0.156541530128353,2.87878787878788,5.48484848484848,0
+"constant observation effort","Solow","later_beta_2_1",1,0.5,3.525,0.276249490042619,2.85,5.9,0
+"constant observation effort","Effort_fixed_alpha","uniform",1.5,0.5,3.4375,0.201261584566583,3.8125,5.9375,0
+"constant observation effort","Solow","uniform",1,0.6,3.525,0.32133803764169,3.4,6.2,0
+"constant observation effort","Solow","later_beta_2_1",1,0.4,3.78125,0.237589467795821,4.75,6.75,0
+"constant observation effort","Effort_fixed_alpha","uniform",1.2,0.5,3.48387096774194,0.265113803696542,5.19354838709677,6.93548387096774,0
+"constant observation effort","Solow","later_beta_2_1",1,0.3,4.18181818181818,0.188585177086256,6.63636363636364,7.27272727272727,0
+"constant observation effort","Solow","uniform",1,0.4,3.96153846153846,0.231573337977032,6.11538461538461,7.34615384615385,0
+"constant observation effort","Effort_fixed_alpha","uniform",1,0.5,3.55172413793103,0.310764212137061,6,7.51724137931035,0
+"constant observation effort","Solow","uniform",1,0.5,3.66666666666667,0.295114159524979,5.72222222222222,7.61111111111111,0
+"constant observation effort","Solow","earlier_beta_1_2",1,0.6,3.71875,0.322879084987464,5.78125,7.65625,0
+"constant observation effort","Solow","earlier_beta_1_2",1,0.5,3.96153846153846,0.269574538158161,6.46153846153846,7.92307692307692,0
+"constant observation effort","Solow","earlier_beta_1_2",1,0.3,4.07692307692308,0.158619005790362,7.38461538461539,8,0
+"constant observation effort","Effort_fixed_alpha","uniform",0.8,0.5,3.68,0.35535721397157,7,8.2,0
+"constant observation effort","Solow","uniform",1,0.3,4.22222222222222,0.182294050828493,7.88888888888889,8.44444444444444,0
+"constant observation effort","Solow","earlier_beta_1_2",1,0.4,4.04761904761905,0.226931588452882,7.61904761904762,8.47619047619048,0
+"constant observation effort","Effort_fixed_alpha","uniform",0.6,0.5,3.85,0.408680666909171,8.4,9.1,0
+"constant observation effort, matched expected sightings","Solow_te_median","earlier_beta_1_2",1,-1,8.45,-1,-1.025,1.675,0
+"constant observation effort, matched expected sightings","Solow_te_median","uniform",1,-1,8.45,-1,-0.525,1.725,0
+"constant observation effort, matched expected sightings","Effort_te_median","uniform",1.8,-1,7.75,-1,-1.6,1.8,0
+"constant observation effort, matched expected sightings","Solow_te_median","later_beta_2_1",1,-1,8.45,-1,-0.225,1.825,0
+"constant observation effort, matched expected sightings","Effort_te_median","uniform",1.5,-1,7.75,-1,-1.25,1.85,0
+"constant observation effort, matched expected sightings","Effort_te_median","uniform",1,-1,7.75,-1,-0.35,1.95,0
+"constant observation effort, matched expected sightings","Effort_te_median","uniform",0.6,-1,7.75,-1,0.95,2.25,0
+"constant observation effort, matched expected sightings","Solow","later_beta_2_1",1,0.6,8.45,0.0963396026101883,2.075,2.825,0
+"constant observation effort, matched expected sightings","Effort_fixed_alpha","uniform",1.8,0.5,7.75,0.0272606281196427,2.85,3.75,0
+"constant observation effort, matched expected sightings","Solow","later_beta_2_1",1,0.5,8.45,0.0963396026101883,3.475,3.875,0
+"constant observation effort, matched expected sightings","Solow","uniform",1,0.6,8.45,0.121626043955433,3.9,4.2,0
+"constant observation effort, matched expected sightings","Effort_fixed_alpha","uniform",1.5,0.5,7.75,0.0526258584122612,3.65,4.25,0
+"constant observation effort, matched expected sightings","Effort_fixed_alpha","uniform",1.2,0.5,7.75,0.0997707164732343,4.75,5.15,0
+"constant observation effort, matched expected sightings","Solow","later_beta_2_1",1,0.4,8.45,0.0963396026101883,5.025,5.175,0
+"constant observation effort, matched expected sightings","Solow","uniform",1,0.5,8.45,0.121626043955433,5.35,5.45,0
+"constant observation effort, matched expected sightings","Effort_fixed_alpha","uniform",1,0.5,7.75,0.151185398572447,5.8,6,0
+"constant observation effort, matched expected sightings","Solow","later_beta_2_1",1,0.3,8.45,0.0963396026101883,6.975,6.975,0
+"constant observation effort, matched expected sightings","Solow","uniform",1,0.4,8.45,0.121626043955433,7.1,7.1,0
+"constant observation effort, matched expected sightings","Solow","earlier_beta_1_2",1,0.6,8.45,0.166009369009697,7.2,7.2,0
+"constant observation effort, matched expected sightings","Effort_fixed_alpha","uniform",0.8,0.5,7.75,0.226232728492183,7.35,7.45,0
+"constant observation effort, matched expected sightings","Solow","earlier_beta_1_2",1,0.5,8.72972972972973,0.137637947560238,7.94594594594595,7.94594594594595,0
+"constant observation effort, matched expected sightings","Solow","uniform",1,0.3,8.83333333333333,0.094887644154401,8.11111111111111,8.11111111111111,0
+"constant observation effort, matched expected sightings","Solow","earlier_beta_1_2",1,0.4,8.83333333333333,0.129026787266864,9.02777777777778,9.02777777777778,0
+"constant observation effort, matched expected sightings","Effort_fixed_alpha","uniform",0.6,0.5,8.05555555555556,0.308004515464054,9.05555555555556,9.05555555555556,0
+"constant observation effort, matched expected sightings","Solow","earlier_beta_1_2",1,0.3,9.09090909090909,0.108841015310872,9.81818181818182,9.81818181818182,0
+"decreasing observation effort","Effort_te_median","uniform",0.6,-1,2.88461538461538,-1,0.307692307692308,3.69230769230769,0
+"decreasing observation effort","Effort_te_median","uniform",1,-1,2.88461538461538,-1,-1.53846153846154,4,0
+"decreasing observation effort","Effort_te_median","uniform",1.5,-1,2.88461538461538,-1,-2.92307692307692,4.38461538461539,0
+"decreasing observation effort","Solow_te_median","later_beta_2_1",1,-1,2.925,-1,-1.025,4.425,0
+"decreasing observation effort","Effort_te_median","uniform",1.8,-1,2.88461538461538,-1,-3.38461538461538,4.61538461538461,0
+"decreasing observation effort","Solow_te_median","uniform",1,-1,2.925,-1,-2.9,4.85,0
+"decreasing observation effort","Solow_te_median","earlier_beta_1_2",1,-1,2.925,-1,-4.675,5.275,0
+"decreasing observation effort","Solow","later_beta_2_1",1,0.6,2.925,0.294653948093435,-1.375,5.875,0
+"decreasing observation effort","Solow","later_beta_2_1",1,0.4,3.17241379310345,0.241114027721541,2.31034482758621,6.93103448275862,0
+"decreasing observation effort","Effort_fixed_alpha","uniform",1.8,0.5,2.88461538461538,0.198891299222529,3.34615384615385,7.03846153846154,0
+"decreasing observation effort","Solow","later_beta_2_1",1,0.5,2.925,0.294653948093435,1.725,7.125,0
+"decreasing observation effort","Effort_fixed_alpha","uniform",1.2,0.5,3.0952380952381,0.268500768120162,4,7.14285714285714,0
+"decreasing observation effort","Effort_fixed_alpha","uniform",0.6,0.5,3.33333333333333,0.380844959948631,5.41666666666667,7.25,0
+"decreasing observation effort","Solow","uniform",1,0.6,2.925,0.338495225968455,2.175,7.325,0
+"decreasing observation effort","Effort_fixed_alpha","uniform",1.5,0.5,2.92,0.241923340438925,4.12,7.48,0
+"decreasing observation effort","Effort_fixed_alpha","uniform",0.8,0.5,3.25,0.3418523991423,5.125,7.5,0
+"decreasing observation effort","Effort_fixed_alpha","uniform",1,0.5,3.1,0.314454304324173,5,7.6,0
+"decreasing observation effort","Solow","uniform",1,0.5,3.09090909090909,0.293496886706542,3.60606060606061,7.66666666666667,0
+"decreasing observation effort","Solow","earlier_beta_1_2",1,0.6,3.09677419354839,0.326067721840528,3.90322580645161,7.7741935483871,0
+"decreasing observation effort","Solow","earlier_beta_1_2",1,0.5,3.24,0.267886345943935,4,8,0
+"decreasing observation effort","Solow","earlier_beta_1_2",1,0.4,3.26315789473684,0.205456410757175,4.15789473684211,8.05263157894737,0
+"decreasing observation effort","Solow","earlier_beta_1_2",1,0.3,3.46153846153846,0.143385697939763,3.76923076923077,8.07692307692308,0
+"decreasing observation effort","Solow","uniform",1,0.4,3.24,0.238215183296747,4.04,8.12,0
+"decreasing observation effort","Solow","later_beta_2_1",1,0.3,3.36842105263158,0.188206253788415,4.10526315789474,8.21052631578947,0
+"decreasing observation effort","Solow","uniform",1,0.3,3.4375,0.170393330881076,4.5,8.375,0
+"decreasing observation effort, matched expected sightings","Effort_te_median","uniform",1,-1,7.66666666666667,-1,-0.111111111111111,1.44444444444444,0
+"decreasing observation effort, matched expected sightings","Effort_te_median","uniform",1.5,-1,7.66666666666667,-1,-1,1.44444444444444,0
+"decreasing observation effort, matched expected sightings","Effort_te_median","uniform",1.8,-1,7.66666666666667,-1,-1.44444444444444,1.44444444444444,0
+"decreasing observation effort, matched expected sightings","Effort_te_median","uniform",0.6,-1,7.66666666666667,-1,1.33333333333333,1.77777777777778,0
+"decreasing observation effort, matched expected sightings","Solow_te_median","later_beta_2_1",1,-1,8.625,-1,-1.325,2.575,0
+"decreasing observation effort, matched expected sightings","Solow_te_median","earlier_beta_1_2",1,-1,8.625,-1,-2.225,2.725,0
+"decreasing observation effort, matched expected sightings","Solow_te_median","uniform",1,-1,8.625,-1,-1.75,2.75,0
+"decreasing observation effort, matched expected sightings","Solow","later_beta_2_1",1,0.6,8.625,0.0756884913247944,0.725,3.325,0
+"decreasing observation effort, matched expected sightings","Effort_fixed_alpha","uniform",1.8,0.5,7.66666666666667,0.0143762931360565,3.11111111111111,3.33333333333333,0
+"decreasing observation effort, matched expected sightings","Effort_fixed_alpha","uniform",1.5,0.5,7.66666666666667,0.0360901731362529,3.77777777777778,3.77777777777778,0
+"decreasing observation effort, matched expected sightings","Solow","later_beta_2_1",1,0.5,8.625,0.0756884913247944,1.9,4,0
+"decreasing observation effort, matched expected sightings","Solow","uniform",1,0.6,8.625,0.0942918285310317,2.5,4.4,0
+"decreasing observation effort, matched expected sightings","Effort_fixed_alpha","uniform",1.2,0.5,7.66666666666667,0.0854863253286242,4.88888888888889,4.88888888888889,0
+"decreasing observation effort, matched expected sightings","Solow","later_beta_2_1",1,0.4,8.625,0.0756884913247944,3.425,5.075,0
+"decreasing observation effort, matched expected sightings","Solow","uniform",1,0.5,8.625,0.0942918285310317,3.8,5.4,0
+"decreasing observation effort, matched expected sightings","Effort_fixed_alpha","uniform",1,0.5,7.66666666666667,0.144482524827982,6.11111111111111,6.11111111111111,0
+"decreasing observation effort, matched expected sightings","Solow","later_beta_2_1",1,0.3,8.625,0.0756884913247944,5.225,6.425,0
+"decreasing observation effort, matched expected sightings","Solow","uniform",1,0.4,8.625,0.0942918285310317,5.325,6.475,0
+"decreasing observation effort, matched expected sightings","Solow","earlier_beta_1_2",1,0.6,8.625,0.127949683299079,5.425,6.625,0
+"decreasing observation effort, matched expected sightings","Effort_fixed_alpha","uniform",0.8,0.5,7.66666666666667,0.231005044190557,7.55555555555556,7.55555555555556,0
+"decreasing observation effort, matched expected sightings","Solow","earlier_beta_1_2",1,0.5,8.625,0.127949683299079,6.6,7.6,0
+"decreasing observation effort, matched expected sightings","Solow","uniform",1,0.3,8.625,0.0942918285310317,7.025,7.875,0
+"decreasing observation effort, matched expected sightings","Solow","earlier_beta_1_2",1,0.4,8.69230769230769,0.120484033180062,7.66666666666667,8.43589743589744,0
+"decreasing observation effort, matched expected sightings","Solow","earlier_beta_1_2",1,0.3,8.88571428571429,0.0969921120314247,8.42857142857143,9.05714285714286,0
+"decreasing observation effort, matched expected sightings","Effort_fixed_alpha","uniform",0.6,0.5,7.66666666666667,0.344576392084334,10,10,0
+"increasing observation effort","Effort_te_median","uniform",1.8,-1,8.51351351351351,-1,-0.432432432432432,0.756756756756757,0
+"increasing observation effort","Solow_te_median","earlier_beta_1_2",1,-1,8.8,-1,-0.05,0.85,0
+"increasing observation effort","Effort_te_median","uniform",1.5,-1,8.51351351351351,-1,-0.189189189189189,0.891891891891892,0
+"increasing observation effort","Solow_te_median","uniform",1,-1,8.8,-1,0.5,1.1,0
+"increasing observation effort","Effort_te_median","uniform",1,-1,8.51351351351351,-1,0.621621621621622,1.10810810810811,0
+"increasing observation effort","Solow_te_median","later_beta_2_1",1,-1,8.8,-1,0.95,1.3,0
+"increasing observation effort","Effort_te_median","uniform",0.6,-1,8.51351351351351,-1,2.02702702702703,2.08108108108108,0
+"increasing observation effort","Solow","later_beta_2_1",1,0.6,8.8,0.112738839354918,3.225,3.225,0
+"increasing observation effort","Effort_fixed_alpha","uniform",1.8,0.5,8.51351351351351,0.0324806482479928,4,4,0
+"increasing observation effort","Solow","later_beta_2_1",1,0.5,8.8,0.112738839354918,4.725,4.725,0
+"increasing observation effort","Effort_fixed_alpha","uniform",1.5,0.5,8.51351351351351,0.0558812827527239,4.81081081081081,4.81081081081081,0
+"increasing observation effort","Solow","uniform",1,0.6,8.8,0.142989871630262,5.3,5.3,0
+"increasing observation effort","Effort_fixed_alpha","uniform",1.2,0.5,8.51351351351351,0.100932432733411,5.89189189189189,5.89189189189189,0
+"increasing observation effort","Solow","later_beta_2_1",1,0.4,8.94871794871795,0.105283200060751,6.20512820512821,6.20512820512821,0
+"increasing observation effort","Solow","uniform",1,0.5,8.8,0.142989871630262,6.9,6.9,0
+"increasing observation effort","Effort_fixed_alpha","uniform",1,0.5,8.51351351351351,0.152824057236251,7.13513513513514,7.13513513513514,0
+"increasing observation effort","Solow","later_beta_2_1",1,0.3,9.24324324324324,0.092235445105681,7.78378378378378,7.78378378378378,0
+"increasing observation effort","Effort_fixed_alpha","uniform",0.8,0.5,8.8,0.214296296725599,8.05714285714286,8.05714285714286,0
+"increasing observation effort","Solow","uniform",1,0.4,9.07894736842105,0.125529841452538,8.21052631578947,8.21052631578947,0
+"increasing observation effort","Solow","earlier_beta_1_2",1,0.6,9.07894736842105,0.173546018556071,8.26315789473684,8.26315789473684,0
+"increasing observation effort","Solow","earlier_beta_1_2",1,0.5,9.18918918918919,0.164292571303901,9.35135135135135,9.35135135135135,0
+"increasing observation effort","Solow","uniform",1,0.3,9.36111111111111,0.111023946829492,9.55555555555556,9.55555555555556,0
+"increasing observation effort","Effort_fixed_alpha","uniform",0.6,0.5,9.09090909090909,0.315322253358334,10,10,0
+"increasing observation effort","Solow","earlier_beta_1_2",1,0.4,9.55882352941176,0.139429560659766,10.1470588235294,10.1470588235294,0
+"increasing observation effort","Solow","earlier_beta_1_2",1,0.3,9.83870967741935,0.120725419594814,11.1290322580645,11.1290322580645,0

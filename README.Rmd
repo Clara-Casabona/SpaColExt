@@ -268,10 +268,62 @@ visualize_priors_effects(
 )
 ```
 
+## Simulation Diagnostics: Estimating Extinction Dates
+
+The posterior probability curves above are useful for asking whether a species is likely to persist at a given end year. However, estimating a single extinction date from those curves requires an additional decision rule.
+
+The original simulation workflow used the first year where the posterior extant probability crossed below 0.5. This is intuitive, but it can be a noisy date estimator because it depends on the shape of the posterior curve through calendar time. A complementary estimator is now available through `posterior_extinction_year_quantile()`, which estimates a quantile of the posterior distribution of the extinction time itself. The default is the posterior median:
+
+```{r example-extinction-year-quantile}
+posterior_extinction_year_quantile(
+  sightings = sightings,
+  start_year = start_year,
+  stop_year = end_year,
+  method = "solow",
+  probability = 0.5
+)
+```
+
+The simulation diagnostics compare these two ways of turning the model output into an extinction-year estimate:
+
+- **threshold 0.5**: first year where posterior persistence drops below 0.5;
+- **posterior median `te`**: median of the posterior distribution of the extinction time.
+
+They also compare observation-process scenarios:
+
+- **constant effort**: homogeneous observation process (`alpha = 1`);
+- **increasing effort**: more observations expected later in the study period (`alpha > 1`);
+- **decreasing effort**: fewer observations expected near extinction (`alpha < 1`);
+- **matched sightings** versions: the observation-rate parameter is adjusted so that scenarios have comparable expected numbers of sightings.
+
+![Comparison of threshold and posterior-median extinction-year estimators](analysis/simulation_study/results/figures/extinction_quantile_estimator_comparison.png)
+
+The main result is that the posterior median of `te` is generally a better extinction-date estimator than the threshold rule. In the simulations, the threshold rule tends to estimate extinction too late, especially when posterior extant probabilities decline slowly. The posterior median directly summarizes the inferred extinction-time distribution and usually has lower mean absolute error.
+
+Mean absolute errors from the diagnostic run are:
+
+| Scenario | Solow threshold | Solow median `te` | Effort threshold | Effort median `te` |
+|---|---:|---:|---:|---:|
+| Constant effort | 7.6 | 3.7 | 7.5 | 3.3 |
+| Constant effort, matched sightings | 5.4 | 1.7 | 6.0 | 2.0 |
+| Increasing effort | 6.9 | 1.1 | 4.0 | 0.8 |
+| Decreasing effort | 7.7 | 4.8 | 7.2 | 3.7 |
+| Decreasing effort, matched sightings | 5.4 | 2.8 | 10.0 | 1.8 |
+
+The diagnostics also show that performance depends strongly on the amount of information in the sightings. In the original constant-effort scenario there are fewer sightings on average than in the increasing-effort scenario, so poorer performance is not only caused by the shape of effort. When constant or decreasing effort is matched to have a comparable number of sightings, the extinction-date error decreases substantially.
+
+For decreasing effort before extinction, the effort-informed median estimator still improves over the threshold rule, but it remains sensitive to sparse recent observations. This is expected: when observation effort declines near the true extinction date, the absence of late sightings is less informative than it would be under constant or increasing effort.
+
+The reproducible scripts are:
+
+- `analysis/simulation_study/diagnose_extinction_improvements.R`;
+- `analysis/simulation_study/plot_extinction_quantile_comparison.R`.
+
 ## Function Overview
 
 - `compute_posterior_solow1993()`: posterior extant probability for one study interval.
 - `posterior_probability_extinction_varying_end_year()`: posterior extant probabilities for a sequence of end years.
+- `posterior_extinction_year_quantile()`: posterior quantile estimate of extinction year.
 - `posterior_probability_colonization_varying_year()`: posterior colonization probabilities using time reversal.
 - `spatial_posterior_probability_extinction_varying_end_year()`: applies the varying end-year workflow across spatial cells.
 - `make_grid_adjacency()`: creates a neighbour list for a regular grid.

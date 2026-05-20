@@ -1,0 +1,7 @@
+"experiment","scenario","method","final_probability","date_error","absolute_date_error","no_threshold_crossing","n_sightings"
+"extinction","constant observation effort","Effort_fixed_alpha",0.297,5.36,8.05,0,3.8
+"extinction","increasing observation effort","Effort_fixed_alpha",0.02,3.96,4.04,0,8.4
+"extinction","constant observation effort","Kodikara",0.268,3.27,7.18,0,3.7
+"extinction","increasing observation effort","Kodikara",0.084,4.68,4.76,0,8.4
+"extinction","constant observation effort","Solow",0.289,5.38,8.32,0,3.9
+"extinction","increasing observation effort","Solow",0.144,6.59,7.04,0,8.3
