@@ -12,7 +12,7 @@ $$
 \rho \frac{1}{|N_i|}\sum_{j \in N_i}\text{logit}(p_j(t))
 $$
 
-where \(p_i(t)\) is the local posterior probability in cell \(i\), \(N_i\) is the set of neighbouring cells, and \(\rho\) controls neighbour influence.
+where $p_i(t)$ is the local posterior probability in cell $i$, $N_i$ is the set of neighbouring cells, and $\rho$ controls neighbour influence.
 
 ```{r}
 pkgload::load_all("..", quiet = TRUE)
