@@ -1,0 +1,79 @@
+# Basic Extinction Workflows
+
+The main input is a numeric vector of sighting years. In the simplest case, `compute_posterior_solow1993()` returns the posterior probability that the species is still extant at the end of the study interval.
+
+```{r}
+pkgload::load_all("..", quiet = TRUE)
+
+sightings <- c(1901, 1902, 1903, 1905, 1908, 1910)
+start_year <- 1900
+end_year <- 1920
+
+compute_posterior_solow1993(
+  sightings = sightings,
+  start_year = start_year,
+  end_year = end_year,
+  dprior_m = solowdprior_m,
+  dprior_te = solowdprior_te,
+  prior = 0.5
+)
+```
+
+## Posterior Probability Through Time
+
+Use `posterior_probability_extinction_varying_end_year()` to evaluate the posterior extant probability for every year in a study period.
+
+```{r}
+posterior <- posterior_probability_extinction_varying_end_year(
+  sightings = sightings,
+  start_year = start_year,
+  stop_year = end_year
+)
+
+posterior_df <- data.frame(
+  year = seq(start_year, end_year),
+  extant_probability = posterior
+)
+
+head(posterior_df)
+```
+
+```{r}
+ggplot2::ggplot(posterior_df, ggplot2::aes(year, extant_probability)) +
+  ggplot2::geom_line(linewidth = 0.8, color = "#0072B2") +
+  ggplot2::geom_point(size = 1.7, color = "#0072B2") +
+  ggplot2::coord_cartesian(ylim = c(0, 1)) +
+  ggplot2::theme_bw(base_size = 10) +
+  ggplot2::labs(x = "Year", y = "Posterior extant probability")
+```
+
+## Estimating an Extinction Year
+
+A posterior extant-probability curve can be converted into a date by using a decision threshold, such as the first year where posterior persistence drops below 0.5. That rule is intuitive, but it is not the same as estimating the posterior distribution of the extinction time.
+
+`posterior_extinction_year_quantile()` estimates a quantile of the posterior distribution of extinction time. The default is the median.
+
+```{r}
+posterior_extinction_year_quantile(
+  sightings = sightings,
+  start_year = start_year,
+  stop_year = end_year,
+  method = "solow",
+  probability = 0.5
+)
+```
+
+For the fixed-alpha effort-informed likelihood:
+
+```{r}
+posterior_extinction_year_quantile(
+  sightings = sightings,
+  start_year = start_year,
+  stop_year = end_year,
+  method = "fixed_alpha",
+  alpha = 1.2,
+  probability = 0.5
+)
+```
+
+The `probability` argument can be changed to obtain other posterior quantiles, for example 0.25 or 0.75.

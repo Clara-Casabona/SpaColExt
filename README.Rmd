@@ -3,12 +3,7 @@
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  fig.width = 5.5,
-  fig.height = 3.2,
-  dpi = 120,
-  out.width = "70%"
+  comment = "#>"
 )
 pkgload::load_all(".", quiet = TRUE)
 ```
@@ -21,44 +16,34 @@ pkgload::load_all(".", quiet = TRUE)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 <!-- badges: end -->
 
-SpaColExt is an R package for inferring extinction and colonization dates from species sighting records. It focuses on Bayesian extinction inference through time and across spatial units, with tools for:
+SpaColExt is an R package for inferring extinction and colonization dates from species sighting records. It provides Bayesian extinction inference through time, spatial helper functions, colonization inference by time reversal, and experimental effort-informed observation models.
 
-- estimating posterior extant probabilities from sighting years;
-- applying Solow-style Bayesian extinction estimators;
-- evaluating posterior probabilities over a sequence of possible end years;
-- applying the same workflow independently across spatial cells;
-- exploring informative priors for extinction time and observation rate.
+The package currently implements methods based on Solow (1993), with experimental non-homogeneous observation-rate functions inspired by Kodikara et al. (2020).
 
-The package currently implements methods based on Solow (1993), with experimental non-homogeneous observation-rate functions inspired by Kodikara et al. (2020). Solow and Beet (2014)-style uncertain sighting support is planned but not yet part of the stable workflow.
+## Manual
 
-## Model Interpretation
+The detailed documentation now lives in the Quarto manual: [`book/`](book/).
 
-The core output of SpaColExt is a posterior probability, usually interpreted as the probability that a species is still extant at a given time conditional on the observed sighting record:
+Render it from the package root with:
 
-$$
-P(H_0 \mid D) =
-\left(1 + \frac{1 - \pi}{\pi B(D)}\right)^{-1}
-$$
+```bash
+quarto render book
+```
 
-where $H_0$ is the hypothesis that the species is extant, $D$ is the sighting record, $\pi$ is the prior probability of persistence, and $B(D)$ is the Bayes factor comparing persistence to extinction.
+After rendering, open:
 
-For the non-homogeneous observation process, the package follows the idea that sighting intensity may vary through time:
+```text
+book/_book/index.html
+```
 
-$$
-\lambda(t) = \alpha m^\alpha t^{\alpha - 1}
-$$
+The manual includes:
 
-Here, $m$ controls the observation rate and $\alpha$ controls the shape of the observation process through time. The value $\alpha = 1$ corresponds to a homogeneous process, equivalent to assuming constant observation intensity. Values above or below 1 represent increasing or decreasing observation intensity through time.
-
-In ecological applications, $\alpha$ should not be interpreted as sampling effort itself. A safer interpretation is that $\alpha$ is a shape parameter informed by sampling effort, used to represent temporal heterogeneity in detectability or observation intensity. For example, if eBird checklist effort increases strongly through time, using $\alpha > 1$ can make the observation process more consistent with increasing search effort.
-
-One possible empirical calibration is to fit a relationship between yearly effort $E_t$ and scaled time:
-
-$$
-\log(E_t) = c + (\alpha - 1)\log(t)
-$$
-
-This treats $\alpha$ as a compact summary of temporal change in effort. This approach is still experimental and should be reported as an effort-informed sensitivity analysis unless the calibration is explicitly validated.
+- model interpretation;
+- basic extinction and colonization workflows;
+- spatial posterior smoothing;
+- informative-prior examples;
+- simulation diagnostics for constant, increasing, and decreasing observation effort;
+- comparison of threshold-based extinction dates with posterior median estimates of extinction time.
 
 ## Installation
 
@@ -75,9 +60,9 @@ Load the package with:
 library(SpaColExt)
 ```
 
-## Basic Workflow
+## Quick Example
 
-The main input is a numeric vector of sighting years. In the simplest case, `compute_posterior_solow1993()` returns the posterior probability that the species is still extant at the end of the study interval.
+The main input is a numeric vector of sighting years. `compute_posterior_solow1993()` returns the posterior probability that the species is still extant at the end of the study interval.
 
 ```{r example-solow}
 sightings <- c(1901, 1902, 1903, 1905, 1908, 1910)
@@ -94,187 +79,9 @@ compute_posterior_solow1993(
 )
 ```
 
-## Posterior Probability Through Time
+To estimate an extinction year directly from the posterior distribution of extinction time, use `posterior_extinction_year_quantile()`. The default quantile is the posterior median.
 
-Use `posterior_probability_extinction_varying_end_year()` to evaluate the posterior extant probability for every year in a study period.
-
-```{r example-varying-end-year, fig.width=5, fig.height=3}
-posterior <- posterior_probability_extinction_varying_end_year(
-  sightings = sightings,
-  start_year = start_year,
-  stop_year = end_year
-)
-
-posterior_df <- data.frame(
-  year = seq(start_year, end_year),
-  extant_probability = posterior
-)
-
-head(posterior_df)
-
-ggplot2::ggplot(posterior_df, ggplot2::aes(year, extant_probability)) +
-  ggplot2::geom_line(linewidth = 0.8, color = "#0072B2") +
-  ggplot2::geom_point(size = 1.7, color = "#0072B2") +
-  ggplot2::coord_cartesian(ylim = c(0, 1)) +
-  ggplot2::theme_bw(base_size = 10) +
-  ggplot2::labs(x = "Year", y = "Posterior extant probability")
-```
-
-## Spatial Workflow
-
-Spatial analyses use a matrix-like object where each cell contains a vector of sighting years for one site. Cells with no observations can be set to `NA`.
-
-By default, spatial cells are treated independently. SpaColExt also includes a simple neighbour-informed adjustment for cases where adjacent cells are expected to have similar extinction or persistence dynamics. This is not a full Bayesian spatial hierarchical model. It is a transparent spatial smoothing step applied after local posterior curves have been estimated:
-
-$$
-\text{logit}(p_i^{spatial}(t)) =
-(1 - \rho)\text{logit}(p_i(t)) +
-\rho \frac{1}{|N_i|}\sum_{j \in N_i}\text{logit}(p_j(t))
-$$
-
-where $p_i(t)$ is the local posterior probability in cell $i$, $N_i$ is the set of neighbouring cells, and $\rho$ controls neighbour influence. When $\rho = 0$, the result is the independent local posterior. Larger values borrow more information from adjacent cells.
-
-```{r example-spatial, fig.width=5.5, fig.height=4, out.width="65%"}
-sighting_grid <- list(
-  c(1880, 1883, 1895, 1897, 1899), c(1881, 1884, 1892, 1901), NA, NA,
-  c(1882, 1888, 1894, 1898), c(1885, 1892, 1902, 1910), c(1887, 1899, 1905), NA,
-  NA, c(1890, 1895, 1901), c(1892, 1898, 1904, 1912), c(1894, 1902, 1914),
-  NA, c(1898, 1904), c(1901, 1908, 1916), c(1902, 1910, 1920)
-)
-dim(sighting_grid) <- c(4, 4)
-
-spatial_posterior <- spatial_posterior_probability_extinction_varying_end_year(
-  sighting_grid,
-  start_year = 1880,
-  stop_year = 1930
-)
-
-spatial_posterior_smoothed <- smooth_spatial_posterior(
-  spatial_posterior,
-  rho = 0.35
-)
-
-independent_grid <- final_year_probability_grid(spatial_posterior)
-smoothed_grid <- final_year_probability_grid(spatial_posterior_smoothed)
-
-grid_df <- rbind(
-  data.frame(
-    row = rep(seq_len(nrow(independent_grid)), times = ncol(independent_grid)),
-    col = rep(seq_len(ncol(independent_grid)), each = nrow(independent_grid)),
-    extant_probability = as.vector(independent_grid),
-    model = "Independent cells"
-  ),
-  data.frame(
-    row = rep(seq_len(nrow(smoothed_grid)), times = ncol(smoothed_grid)),
-    col = rep(seq_len(ncol(smoothed_grid)), each = nrow(smoothed_grid)),
-    extant_probability = as.vector(smoothed_grid),
-    model = "Neighbour-informed"
-  )
-)
-
-ggplot2::ggplot(grid_df, ggplot2::aes(col, row, fill = extant_probability)) +
-  ggplot2::geom_tile(color = "white", linewidth = 0.8) +
-  ggplot2::geom_text(
-    ggplot2::aes(label = ifelse(is.na(extant_probability), "", sprintf("%.2f", extant_probability))),
-    size = 3
-  ) +
-  ggplot2::scale_y_reverse(breaks = seq_len(4)) +
-  ggplot2::scale_x_continuous(breaks = seq_len(4)) +
-  ggplot2::scale_fill_viridis_c(
-    option = "C",
-    limits = c(0, 1),
-    na.value = "grey92",
-    name = "P(extant)"
-  ) +
-  ggplot2::coord_equal() +
-  ggplot2::facet_wrap(~model) +
-  ggplot2::theme_bw(base_size = 10) +
-  ggplot2::theme(panel.grid = ggplot2::element_blank()) +
-  ggplot2::labs(x = "Column", y = "Row")
-```
-
-These grids summarize the posterior probability of persistence in the final year of the study period. The neighbour-informed version partially pools each cell with its rook neighbours. This can stabilize isolated cells with sparse observations, but it should be interpreted as spatial smoothing rather than proof of dispersal or local demographic coupling.
-
-## Colonization by Time Reversal
-
-Colonization can be treated as the temporal mirror of extinction. If a species is absent before colonization and present after colonization, reversing the time axis turns the problem into an extinction-like problem. SpaColExt uses this idea in `posterior_probability_colonization_varying_year()`.
-
-```{r example-colonization, fig.width=5, fig.height=3}
-set.seed(42)
-
-colonization_start_year <- 1980
-colonization_stop_year <- 2020
-true_colonization_year <- 1998
-
-colonization_sightings <- sort(unique(
-  true_colonization_year + floor(cumsum(stats::rexp(20, rate = 0.35)))
-))
-colonization_sightings <- colonization_sightings[colonization_sightings <= colonization_stop_year]
-
-colonization_posterior <- posterior_probability_colonization_varying_year(
-  sightings = colonization_sightings,
-  start_year = colonization_start_year,
-  stop_year = colonization_stop_year
-)
-
-colonization_df <- data.frame(
-  year = seq(colonization_start_year, colonization_stop_year),
-  colonization_probability = colonization_posterior
-)
-
-ggplot2::ggplot(colonization_df, ggplot2::aes(year, colonization_probability)) +
-  ggplot2::geom_line(linewidth = 0.8, color = "#009E73") +
-  ggplot2::geom_point(size = 1.6, color = "#009E73") +
-  ggplot2::geom_vline(xintercept = true_colonization_year, linetype = "dashed", color = "grey40") +
-  ggplot2::coord_cartesian(ylim = c(0, 1)) +
-  ggplot2::theme_bw(base_size = 10) +
-  ggplot2::labs(x = "Year", y = "Posterior colonization probability")
-```
-
-The dashed line shows the simulated colonization year. In real applications this year is unknown; the curve should be interpreted as the posterior probability that colonization had already occurred by each year.
-
-## Informative Priors
-
-`compute_posterior_c2022_extinction()` allows custom priors for extinction time (`prior_te`) and observation rate (`prior_m`). This is useful when independent ecological or sampling information should influence the posterior.
-
-The priors below are intentionally informative so their effect is visible. A flat prior such as `function(te) 1` and the Solow prior `function(m) 1 / m` reproduce the default model, so all curves would overlap.
-
-```{r example-informative-priors}
-prior_te <- function(te) stats::dnorm(te, mean = 1913, sd = 3)
-prior_m <- function(m) stats::dlnorm(
-  pmax(m, .Machine$double.eps),
-  meanlog = log(2),
-  sdlog = 0.45
-)
-
-compute_posterior_c2022_extinction(
-  sightings = sightings,
-  start_year = start_year,
-  stop_year = end_year,
-  prior_te = prior_te,
-  prior_m = prior_m
-)
-```
-
-You can also compare the effect of different prior combinations:
-
-```{r example-prior-plot, fig.width=5.5, fig.height=3.2}
-visualize_priors_effects(
-  t_start = start_year,
-  t_stop = end_year,
-  sightings = sightings,
-  prior_te = prior_te,
-  prior_m = prior_m
-)
-```
-
-## Simulation Diagnostics: Estimating Extinction Dates
-
-The posterior probability curves above are useful for asking whether a species is likely to persist at a given end year. However, estimating a single extinction date from those curves requires an additional decision rule.
-
-The original simulation workflow used the first year where the posterior extant probability crossed below 0.5. This is intuitive, but it can be a noisy date estimator because it depends on the shape of the posterior curve through calendar time. A complementary estimator is now available through `posterior_extinction_year_quantile()`, which estimates a quantile of the posterior distribution of the extinction time itself. The default is the posterior median:
-
-```{r example-extinction-year-quantile}
+```{r example-extinction-year}
 posterior_extinction_year_quantile(
   sightings = sightings,
   start_year = start_year,
@@ -284,66 +91,38 @@ posterior_extinction_year_quantile(
 )
 ```
 
-The simulation diagnostics compare these two ways of turning the model output into an extinction-year estimate:
+## Simulation Diagnostics
 
-- **threshold 0.5**: first year where posterior persistence drops below 0.5;
-- **posterior median `te`**: median of the posterior distribution of the extinction time.
+Reproducible simulation scripts are stored in:
 
-They also compare observation-process scenarios:
+```text
+analysis/simulation_study/
+```
 
-- **constant effort**: homogeneous observation process (`alpha = 1`);
-- **increasing effort**: more observations expected later in the study period (`alpha > 1`);
-- **decreasing effort**: fewer observations expected near extinction (`alpha < 1`);
-- **matched sightings** versions: the observation-rate parameter is adjusted so that scenarios have comparable expected numbers of sightings.
+The newest diagnostics compare:
 
-![Comparison of threshold and posterior-median extinction-year estimators](analysis/simulation_study/results/figures/extinction_quantile_estimator_comparison.png)
+- threshold estimator: first year where posterior persistence drops below 0.5;
+- posterior-time estimator: posterior median of extinction time `te`;
+- constant, increasing, and decreasing observation-effort scenarios;
+- matched-sightings scenarios that separate effort shape from the number of observations.
 
-The main result is that the posterior median of `te` is generally a better extinction-date estimator than the threshold rule. In the simulations, the threshold rule tends to estimate extinction too late, especially when posterior extant probabilities decline slowly. The posterior median directly summarizes the inferred extinction-time distribution and usually has lower mean absolute error.
+The current comparison figure is:
 
-Mean absolute errors from the diagnostic run are:
+```text
+analysis/simulation_study/results/figures/extinction_quantile_estimator_comparison.pdf
+```
 
-| Scenario | Solow threshold | Solow median `te` | Effort threshold | Effort median `te` |
-|---|---:|---:|---:|---:|
-| Constant effort | 7.6 | 3.7 | 7.5 | 3.3 |
-| Constant effort, matched sightings | 5.4 | 1.7 | 6.0 | 2.0 |
-| Increasing effort | 6.9 | 1.1 | 4.0 | 0.8 |
-| Decreasing effort | 7.7 | 4.8 | 7.2 | 3.7 |
-| Decreasing effort, matched sightings | 5.4 | 2.8 | 10.0 | 1.8 |
-
-The diagnostics also show that performance depends strongly on the amount of information in the sightings. In the original constant-effort scenario there are fewer sightings on average than in the increasing-effort scenario, so poorer performance is not only caused by the shape of effort. When constant or decreasing effort is matched to have a comparable number of sightings, the extinction-date error decreases substantially.
-
-For decreasing effort before extinction, the effort-informed median estimator still improves over the threshold rule, but it remains sensitive to sparse recent observations. This is expected: when observation effort declines near the true extinction date, the absence of late sightings is less informative than it would be under constant or increasing effort.
-
-The reproducible scripts are:
-
-- `analysis/simulation_study/diagnose_extinction_improvements.R`;
-- `analysis/simulation_study/plot_extinction_quantile_comparison.R`.
-
-## Function Overview
+## Main Functions
 
 - `compute_posterior_solow1993()`: posterior extant probability for one study interval.
 - `posterior_probability_extinction_varying_end_year()`: posterior extant probabilities for a sequence of end years.
 - `posterior_extinction_year_quantile()`: posterior quantile estimate of extinction year.
 - `posterior_probability_colonization_varying_year()`: posterior colonization probabilities using time reversal.
 - `spatial_posterior_probability_extinction_varying_end_year()`: applies the varying end-year workflow across spatial cells.
-- `make_grid_adjacency()`: creates a neighbour list for a regular grid.
 - `smooth_spatial_posterior()`: applies neighbour-informed smoothing to spatial posterior curves.
-- `final_year_probability_grid()`: extracts final-year probabilities for spatial plotting.
-- `plot_posterior_distribution()`: plots posterior extant probabilities through time.
 - `compute_posterior_c2022_extinction()`: posterior curve with optional informative priors.
-- `transform_and_reverse()`: helper for reversing sighting dates for colonization-oriented workflows.
 
 Experimental non-homogeneous functions are available, but their interface and numerical behavior may still change.
-
-## Development Status
-
-SpaColExt is under active development. The current maintenance priorities are:
-
-- add stable support for colonization-date inference;
-- formalize spatial dependence between neighbouring sites;
-- add support for uncertain sightings;
-- expand tests around the non-homogeneous observation-rate functions;
-- improve method references and vignettes for applied ecological workflows.
 
 ## References
 

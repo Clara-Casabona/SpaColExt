@@ -1,0 +1,17 @@
+{
+  "hash": "cf8ee63623dd33e8ec38220ef1aa305c",
+  "result": {
+    "engine": "knitr",
+    "markdown": "# Basic Extinction Workflows\n\nThe main input is a numeric vector of sighting years. In the simplest case, `compute_posterior_solow1993()` returns the posterior probability that the species is still extant at the end of the study interval.\n\n\n::: {.cell}\n\n```{.r .cell-code}\npkgload::load_all(\"..\", quiet = TRUE)\n\nsightings <- c(1901, 1902, 1903, 1905, 1908, 1910)\nstart_year <- 1900\nend_year <- 1920\n\ncompute_posterior_solow1993(\n  sightings = sightings,\n  start_year = start_year,\n  end_year = end_year,\n  dprior_m = solowdprior_m,\n  dprior_te = solowdprior_te,\n  prior = 0.5\n)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 0.1388889\n```\n\n\n:::\n:::\n\n\n## Posterior Probability Through Time\n\nUse `posterior_probability_extinction_varying_end_year()` to evaluate the posterior extant probability for every year in a study period.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nposterior <- posterior_probability_extinction_varying_end_year(\n  sightings = sightings,\n  start_year = start_year,\n  stop_year = end_year\n)\n\nposterior_df <- data.frame(\n  year = seq(start_year, end_year),\n  extant_probability = posterior\n)\n\nhead(posterior_df)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n  year extant_probability\n1 1900                  1\n2 1901                  1\n3 1902                  1\n4 1903                  1\n5 1904                  1\n6 1905                  1\n```\n\n\n:::\n:::\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nggplot2::ggplot(posterior_df, ggplot2::aes(year, extant_probability)) +\n  ggplot2::geom_line(linewidth = 0.8, color = \"#0072B2\") +\n  ggplot2::geom_point(size = 1.7, color = \"#0072B2\") +\n  ggplot2::coord_cartesian(ylim = c(0, 1)) +\n  ggplot2::theme_bw(base_size = 10) +\n  ggplot2::labs(x = \"Year\", y = \"Posterior extant probability\")\n```\n\n::: {.cell-output-display}\n![](02-basic-workflows_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n\n\n## Estimating an Extinction Year\n\nA posterior extant-probability curve can be converted into a date by using a decision threshold, such as the first year where posterior persistence drops below 0.5. That rule is intuitive, but it is not the same as estimating the posterior distribution of the extinction time.\n\n`posterior_extinction_year_quantile()` estimates a quantile of the posterior distribution of extinction time. The default is the median.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nposterior_extinction_year_quantile(\n  sightings = sightings,\n  start_year = start_year,\n  stop_year = end_year,\n  method = \"solow\",\n  probability = 0.5\n)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 1911.417\n```\n\n\n:::\n:::\n\n\nFor the fixed-alpha effort-informed likelihood:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nposterior_extinction_year_quantile(\n  sightings = sightings,\n  start_year = start_year,\n  stop_year = end_year,\n  method = \"fixed_alpha\",\n  alpha = 1.2,\n  probability = 0.5\n)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 1911.159\n```\n\n\n:::\n:::\n\n\nThe `probability` argument can be changed to obtain other posterior quantiles, for example 0.25 or 0.75.\n",
+    "supporting": [
+      "02-basic-workflows_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

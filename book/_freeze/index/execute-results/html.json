@@ -1,0 +1,15 @@
+{
+  "hash": "e57c7bebde553c855446c946aee630df",
+  "result": {
+    "engine": "knitr",
+    "markdown": "# Introduction\n\nSpaColExt is an R package for inferring extinction and colonization dates from species sighting records. The package focuses on Bayesian extinction inference through time and across spatial units.\n\nThis manual is the long-form companion to the package README. It documents the model interpretation, the main functions, and the simulation diagnostics used to understand when different estimators work well.\n\nThe package currently implements methods based on Solow (1993), with experimental non-homogeneous observation-rate functions inspired by Kodikara et al. (2020). Solow and Beet (2014)-style uncertain sighting support is planned but not yet part of the stable workflow.\n\n## What the Package Does\n\nSpaColExt provides tools for:\n\n- estimating posterior extant probabilities from sighting years;\n- applying Solow-style Bayesian extinction estimators;\n- evaluating posterior probabilities over a sequence of possible end years;\n- estimating extinction-year quantiles directly from the posterior distribution of extinction time;\n- applying the same workflow independently across spatial cells;\n- exploring informative priors for extinction time and observation rate;\n- running simulation diagnostics for constant, increasing, and decreasing observation effort.\n\n## How to Use This Manual\n\nThe chapters are organized from conceptual to practical:\n\n- Chapter 1 explains the model interpretation.\n- Chapter 2 gives the basic extinction workflow.\n- Chapter 3 covers spatial analyses, colonization by time reversal, and informative priors.\n- Chapter 4 documents the simulation diagnostics and the newer posterior-median extinction-date estimator.\n- Chapter 5 lists the main functions and their roles.\n\nThe book lives inside the package repository, but it is intentionally separated from the package source code. The package remains installable and lightweight; the book is the detailed methodological guide.\n\n## Setup\n\nWhen rendering this book from the `book/` directory, the examples load the package code from the parent repository.\n\n\n::: {.cell}\n\n```{.r .cell-code}\npkgload::load_all(\"..\", quiet = TRUE)\n```\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

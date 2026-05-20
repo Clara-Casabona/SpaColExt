@@ -1,0 +1,39 @@
+# Introduction
+
+SpaColExt is an R package for inferring extinction and colonization dates from species sighting records. The package focuses on Bayesian extinction inference through time and across spatial units.
+
+This manual is the long-form companion to the package README. It documents the model interpretation, the main functions, and the simulation diagnostics used to understand when different estimators work well.
+
+The package currently implements methods based on Solow (1993), with experimental non-homogeneous observation-rate functions inspired by Kodikara et al. (2020). Solow and Beet (2014)-style uncertain sighting support is planned but not yet part of the stable workflow.
+
+## What the Package Does
+
+SpaColExt provides tools for:
+
+- estimating posterior extant probabilities from sighting years;
+- applying Solow-style Bayesian extinction estimators;
+- evaluating posterior probabilities over a sequence of possible end years;
+- estimating extinction-year quantiles directly from the posterior distribution of extinction time;
+- applying the same workflow independently across spatial cells;
+- exploring informative priors for extinction time and observation rate;
+- running simulation diagnostics for constant, increasing, and decreasing observation effort.
+
+## How to Use This Manual
+
+The chapters are organized from conceptual to practical:
+
+- Chapter 1 explains the model interpretation.
+- Chapter 2 gives the basic extinction workflow.
+- Chapter 3 covers spatial analyses, colonization by time reversal, and informative priors.
+- Chapter 4 documents the simulation diagnostics and the newer posterior-median extinction-date estimator.
+- Chapter 5 lists the main functions and their roles.
+
+The book lives inside the package repository, but it is intentionally separated from the package source code. The package remains installable and lightweight; the book is the detailed methodological guide.
+
+## Setup
+
+When rendering this book from the `book/` directory, the examples load the package code from the parent repository.
+
+```{r}
+pkgload::load_all("..", quiet = TRUE)
+```

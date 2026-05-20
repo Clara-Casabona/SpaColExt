@@ -1,0 +1,61 @@
+# Function Overview
+
+This chapter summarizes the main exported functions. See the package help pages for argument-level documentation.
+
+## Core Extinction Functions
+
+- `compute_posterior_solow1993()`: posterior extant probability for one study interval.
+- `posterior_probability_extinction_varying_end_year()`: posterior extant probabilities for a sequence of end years.
+- `posterior_extinction_year_quantile()`: posterior quantile estimate of extinction year.
+- `compute_likelihood_extinction_at_te()`: likelihood at a candidate extinction time for the homogeneous Solow-style model.
+- `compute_bayes_factor_solow1993()`: Bayes factor comparing persistence to extinction under the Solow-style model.
+- `compute_posterior_from_bayes_solow1993()`: converts a Bayes factor into a posterior persistence probability.
+
+## Effort-Informed and Non-Homogeneous Functions
+
+- `compute_posterior_non_homogeneous()`: posterior persistence probability using the experimental non-homogeneous observation process.
+- `compute_posterior_non_homogeneous_fixed_alpha()`: posterior persistence probability with fixed `alpha`.
+- `posterior_probability_extinction_non_homogeneous_varying_end_year()`: non-homogeneous posterior persistence curve.
+- `posterior_extinction_non_homogeneous_fixed_alpha_varying_end_year()`: fixed-alpha posterior persistence curve.
+- `compute_likelihood_extinction_at_te_kodikara()`: likelihood at a candidate extinction time for the non-homogeneous model.
+- `compute_likelihood_extinction_at_te_kodikara_fixed_alpha()`: fixed-alpha likelihood at a candidate extinction time.
+
+These functions are useful for sensitivity analyses, but their interface and numerical behavior may still change.
+
+## Colonization
+
+- `posterior_probability_colonization_varying_year()`: posterior colonization probabilities using time reversal.
+- `transform_and_reverse()`: helper for reversing sighting dates for colonization-oriented workflows.
+
+## Spatial Functions
+
+- `spatial_posterior_probability_extinction_varying_end_year()`: applies the varying end-year workflow across spatial cells.
+- `make_grid_adjacency()`: creates a neighbour list for a regular grid.
+- `smooth_spatial_posterior()`: applies neighbour-informed smoothing to spatial posterior curves.
+- `final_year_probability_grid()`: extracts final-year probabilities for spatial plotting.
+
+## Priors and Plotting
+
+- `solowdprior_m()`: default Solow-style prior for observation rate.
+- `solowdprior_te()`: default flat prior for scaled extinction time.
+- `compute_posterior_c2022_extinction()`: posterior curve with optional informative priors.
+- `visualize_priors_effects()`: compare prior effects visually.
+- `plot_posterior_distribution()`: plot posterior extant probabilities through time.
+
+## Development Status
+
+SpaColExt is under active development. Current priorities include:
+
+- stable support for colonization-date inference;
+- formalizing spatial dependence between neighbouring sites;
+- support for uncertain sightings;
+- broader tests around the non-homogeneous observation-rate functions;
+- improved method references and vignettes for applied ecological workflows.
+
+## References
+
+Solow, A. R. (1993). Inferring extinction from sighting data. *Ecology*, 74(3), 962-964.
+
+Solow, A. R. and Beet, A. R. (2014). On uncertain sightings and inference about extinction. *Conservation Biology*, 28(4), 1119-1123.
+
+Kodikara, S., et al. (2020). Non-homogeneous sighting processes for extinction inference. *Methods in Ecology and Evolution*.

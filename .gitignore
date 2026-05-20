@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 /data
+/book/_book
+/book/.quarto

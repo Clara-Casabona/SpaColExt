@@ -1,0 +1,53 @@
+# Model Interpretation
+
+The core output of SpaColExt is a posterior probability, usually interpreted as the probability that a species is still extant at a given time conditional on the observed sighting record:
+
+$$
+P(H_0 \mid D) =
+\left(1 + \frac{1 - \pi}{\pi B(D)}\right)^{-1}
+$$
+
+where \(H_0\) is the hypothesis that the species is extant, \(D\) is the sighting record, \(\pi\) is the prior probability of persistence, and \(B(D)\) is the Bayes factor comparing persistence to extinction.
+
+## Homogeneous Observation Process
+
+The Solow-style model assumes a homogeneous observation process. In practical terms, the probability structure treats sightings as arising from a constant observation intensity before extinction.
+
+This is often a useful baseline. It is also a strong assumption when historical records, citizen-science effort, survey effort, or reporting intensity change through time.
+
+## Non-Homogeneous Observation Process
+
+For the non-homogeneous observation process, the package follows the idea that sighting intensity may vary through time:
+
+$$
+\lambda(t) = \alpha m^\alpha t^{\alpha - 1}
+$$
+
+Here, \(m\) controls the observation rate and \(\alpha\) controls the shape of the observation process through time.
+
+- \(\alpha = 1\): homogeneous process, equivalent to constant observation intensity.
+- \(\alpha > 1\): increasing observation intensity through time.
+- \(\alpha < 1\): decreasing observation intensity through time.
+
+In ecological applications, \(\alpha\) should not be interpreted as sampling effort itself. A safer interpretation is that \(\alpha\) is a shape parameter informed by sampling effort, used to represent temporal heterogeneity in detectability or observation intensity.
+
+For example, if eBird checklist effort increases strongly through time, using \(\alpha > 1\) can make the observation process more consistent with increasing search effort. Conversely, if survey effort declines before the extinction period, \(\alpha < 1\) can represent reduced late-period detectability.
+
+## Effort Calibration
+
+One possible empirical calibration is to fit a relationship between yearly effort \(E_t\) and scaled time:
+
+$$
+\log(E_t) = c + (\alpha - 1)\log(t)
+$$
+
+This treats \(\alpha\) as a compact summary of temporal change in effort. This approach is still experimental and should be reported as an effort-informed sensitivity analysis unless the calibration is explicitly validated.
+
+## Posterior Probability vs Date Estimation
+
+There are two related but distinct questions:
+
+- Is the species likely still extant at a given end year?
+- What is the most plausible extinction year?
+
+The first question is answered by posterior extant probabilities. The second question requires turning the model output into a date estimate. The simulation diagnostics show that directly estimating a posterior quantile of extinction time is often more stable than using the first year where posterior persistence crosses below a fixed threshold.

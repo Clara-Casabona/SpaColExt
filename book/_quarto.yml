@@ -1,0 +1,27 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "SpaColExt Manual"
+  subtitle: "Extinction and colonization inference from sighting records"
+  author: "Clara Casabona"
+  chapters:
+    - index.qmd
+    - 01-models.qmd
+    - 02-basic-workflows.qmd
+    - 03-spatial-colonization-priors.qmd
+    - 04-simulation-diagnostics.qmd
+    - 05-function-reference.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+    code-fold: false
+
+execute:
+  warning: false
+  message: false
+  freeze: auto
